@@ -186,14 +186,11 @@ public class Game {
             core.Types.TRIBE tribeType = thisTribe.getType();
 
             ArrayList<Integer> allIds = new ArrayList<>();
-            int indexInTypes = -1;
             for (int i = 0; i < tribes.length; ++i) {
                 allIds.add(i);
-                if (tribes[i] == tribeType)
-                    indexInTypes = i;
             }
 
-            this.players[tribeIdx] = players.get(indexInTypes);
+            this.players[tribeIdx] = players.get(tribeIdx);
             this.players[tribeIdx].setPlayerIDs(tribeIdx, allIds);
             this.aiStats[tribeIdx] = new AIStats(tribeIdx);
             this.gpStats[tribeIdx] = new GameplayStats(tribeIdx);

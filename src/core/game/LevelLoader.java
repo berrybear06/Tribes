@@ -37,6 +37,7 @@ class LevelLoader
         int numTribes = tribes.length;
 
         board.init(size.width, tribes);
+        boolean[] hasAssignedCapital = new boolean[numTribes];
 
         //Go through every token in the level file
         for (int i = 0; i < size.height; ++i) {
@@ -58,8 +59,11 @@ class LevelLoader
 
                     for(Tribe t : tribes)
                     {
-                        if(t.getType().getKey() == tribeType)
+                        if(t.getType().getKey() == tribeType && !hasAssignedCapital[t.getTribeId()]) {
                             tribeID = t.getTribeId();
+                            hasAssignedCapital[tribeID] = true;
+                            break;
+                        }
                     }
 
                     if(tribeCounter==numTribes)
