@@ -209,42 +209,9 @@ public class Tribe extends Actor {
         Vector2d center = new Vector2d(x, y);
         boolean requiresNetworkUpdate = false;
 
-        List<Vector2d> tiles = center.neighborhood(range, 0, size);
-        tiles.add(center);
-
-        for(Vector2d tile : tiles)
-        {
-            if (!obsGrid[tile.x][tile.y]) {
-                //Points and visibility.
-                obsGrid[tile.x][tile.y] = true;
-                this.score += TribesConfig.CLEAR_VIEW_POINTS;
-
-                //Network updates for this tribe, only if a road or a water tile has been revealed.
-                Types.TERRAIN terr = b.getTerrainAt(tile.x, tile.y);
-                if(b.isRoad(tile.x, tile.y) || ((terr != null) && terr.isWater()))
-                    requiresNetworkUpdate = true;
-            }
-
-            //Meeting other tribes
-            Unit u = b.getUnitAt(tile.x,tile.y);
-            City c = b.getCityInBorders(tile.x,tile.y);
-
-            //This tribe meets other tribe when clearing view if other tribe's unit or city is visible
-            if( u !=null){
-                meetTribe(r,b.getTribes(),u.getTribeId());
-                //other tribe meets this tribe if moving into visible area
-                if(b.getTribe(u.tribeId).obsGrid[tile.x][tile.y]){
-                    meetTribe(r,b.getTribes(),this.tribeId);
-                }
-            }
-            if(c !=null){
-                meetTribe(r,b.getTribes(),c.getTribeId());
-                //other tribe meets this tribe if moving into visible area
-                if(b.getTribe(c.tribeId).obsGrid[tile.x][tile.y]){
-                    meetTribe(r,b.getTribes(),this.tribeId);
-                }
-            }
-        }
+        for (Vector2d tile : center.neighborhood(range, 0, size))
+            requiresNetworkUpdate |= clearTileAndCheckForNetworkUpdate(tile, r, b);
+        requiresNetworkUpdate |= clearTileAndCheckForNetworkUpdate(center, r, b);
 
         //We may be clearing the last tiles of the board, which grants a monument.
         // The boost is only available when playing with partial observability.
@@ -263,6 +230,42 @@ public class Tribe extends Actor {
         return requiresNetworkUpdate;
     }
 
+    private boolean clearTileAndCheckForNetworkUpdate(Vector2d tile, Random r, Board b) {
+        boolean requiresNetworkUpdate = false;
+
+        if (!obsGrid[tile.x][tile.y]) {
+            //Points and visibility.
+            obsGrid[tile.x][tile.y] = true;
+            this.score += TribesConfig.CLEAR_VIEW_POINTS;
+
+            //Network updates for this tribe, only if a road or a water tile has been revealed.
+            Types.TERRAIN terr = b.getTerrainAt(tile.x, tile.y);
+            if (b.isRoad(tile.x, tile.y) || ((terr != null) && terr.isWater()))
+                requiresNetworkUpdate = true;
+        }
+
+        //Meeting other tribes
+        Unit u = b.getUnitAt(tile.x, tile.y);
+        City c = b.getCityInBorders(tile.x, tile.y);
+
+        //This tribe meets other tribe when clearing view if other tribe's unit or city is visible
+        if (u != null){
+            meetTribe(r, b.getTribes(), u.getTribeId());
+            //other tribe meets this tribe if moving into visible area
+            if (b.getTribe(u.tribeId).obsGrid[tile.x][tile.y]){
+                meetTribe(r, b.getTribes(), this.tribeId);
+            }
+        }
+        if (c != null){
+            meetTribe(r, b.getTribes(), c.getTribeId());
+            //other tribe meets this tribe if moving into visible area
+            if (b.getTribe(c.tribeId).obsGrid[tile.x][tile.y]){
+                meetTribe(r, b.getTribes(), this.tribeId);
+            }
+        }
+
+        return requiresNetworkUpdate;
+    }
 
     public void addCity(int id) {
         citiesID.add(id);
@@ -349,7 +352,7 @@ public class Tribe extends Actor {
     public void addStars(int stars) {
         this.stars += stars;
 
-        if(this.stars >= TribesConfig.EMPERORS_TOMB_STARS && monuments.get(Types.BUILDING.EMPERORS_TOMB) == MONUMENT_STATUS.UNAVAILABLE)
+        if(this.stars >= TribesConfig.EMPERORS_TOMB_STARS && monuments.get(EMPERORS_TOMB) == MONUMENT_STATUS.UNAVAILABLE)
             monuments.put(EMPERORS_TOMB, MONUMENT_STATUS.AVAILABLE);
     }
 
@@ -601,7 +604,7 @@ public class Tribe extends Actor {
         //manage production and population of this new city (and others!)
         for(Building building : lostCity.getBuildings())
         {
-            if(building.type.isBase() || building.type == Types.BUILDING.PORT)
+            if(building.type.isBase() || building.type == PORT)
             {
                 lostCity.updateBuildingEffects(gameState, building, true, true);
             }
