@@ -18,10 +18,11 @@ public class MoveFactory implements ActionFactory {
     public LinkedList<Action> computeActionVariants(final Actor actor, final GameState gs) {
         Unit unit = (Unit) actor;
         LinkedList<Action> moves = new LinkedList<>();
-        Pathfinder tp = new Pathfinder(unit.getPosition(), new StepMove(gs, unit));
+
 
         //If a units turn is FINISHED don't do unnecessary calculations.
         if(unit.canMove()) {
+            Pathfinder tp = new Pathfinder(unit.getPosition(), new StepMove(gs, unit));
             for(PathNode tile : tp.findPaths()) {
                 if(gs.getBoard().getUnitAt(tile.getX(), tile.getY()) == null) {
                     Move action = new Move(unit.getActorId());
