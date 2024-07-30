@@ -213,17 +213,15 @@ public class GUI extends JFrame {
             Point2D mouseLocation = MouseInfo.getPointerInfo().getLocation();
             Point2D panelLocation = mainPanel.getLocationOnScreen();
             Vector2d viewCenter = new Vector2d(boardView.getPreferredSize().width/2, boardView.getPreferredSize().height/2);
-            Vector2d diff = new Vector2d((int)(mouseLocation.getX() - panelLocation.getX() - viewCenter.x)/GUI_ZOOM_FACTOR,
-                    (int)(mouseLocation.getY() - panelLocation.getY() - viewCenter.y)/GUI_ZOOM_FACTOR);
-            if (e.getWheelRotation() < 0) {
-                // Zooming in
-                CELL_SIZE += GUI_ZOOM_FACTOR;
-                diff = new Vector2d(diff.x*-1, diff.y*-1);
-            } else {
-                // Zooming out
-                CELL_SIZE -= GUI_ZOOM_FACTOR;
-            }
-            boardView.updatePan(diff);
+            double effectiveZoom = (e.getWheelRotation() < 0 ? GUI_ZOOM_FACTOR : 1.0 / GUI_ZOOM_FACTOR);
+            CELL_SIZE = (int) Math.round((double) CELL_SIZE * effectiveZoom);
+            if (CELL_SIZE < 1) CELL_SIZE = 1;
+            if (CELL_SIZE > 500) {effectiveZoom = 500.0 / (CELL_SIZE / effectiveZoom); CELL_SIZE = 500;}
+            // panTranslate is measured from center left; mouse position from top left
+            // Standardize to center left
+            int effectiveMouseX = (int)(mouseLocation.getX() - panelLocation.getX());
+            int effectiveMouseY = (int)(mouseLocation.getY() - panelLocation.getY() - viewCenter.y);
+            boardView.zoom(effectiveZoom, effectiveMouseX, effectiveMouseY);
         });
 
         mainPanel.setLayout(new GridBagLayout());

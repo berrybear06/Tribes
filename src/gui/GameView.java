@@ -655,6 +655,11 @@ public class GameView extends JComponent {
                 this.panTranslate.y + panTranslate.y);
     }
 
+    void zoom(double zoomFactor, int focusX, int focusY) {
+        panTranslate.subtract((int)((focusX - panTranslate.x) * (zoomFactor - 1.0)),
+                (int)((focusY - panTranslate.y) * (zoomFactor - 1.0)));
+    }
+
     void setPanToTribe(GameState gs) {
         // Focus on capital of tribe
         Tribe t = gs.getTribe(gs.getActiveTribeID());

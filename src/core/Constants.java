@@ -30,7 +30,7 @@ public class Constants {
 
     public static int SHADOW_OFFSET = 1;
     public static int ROUND_RECT_ARC = 5;
-    public static int GUI_ZOOM_FACTOR = 5;
+    public static double GUI_ZOOM_FACTOR = 1.1;
 
     //Maximum number of turns to be played and playing settings
     static final int MAX_TURNS = 30;
