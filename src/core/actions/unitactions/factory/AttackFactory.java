@@ -10,6 +10,7 @@ import core.game.GameState;
 import utils.Vector2d;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class AttackFactory implements ActionFactory {
 
@@ -24,7 +25,7 @@ public class AttackFactory implements ActionFactory {
             Vector2d position = unit.getPosition();
 
             // Loop through unit range, check if tile observable and action feasible, if so add action
-            LinkedList<Vector2d> potentialTiles = position.neighborhood(unit.RANGE, 0, b.getSize()); //use neighbourhood for board limits
+            List<Vector2d> potentialTiles = position.neighborhood(unit.RANGE, 0, b.getSize()); //use neighbourhood for board limits
             for (Vector2d tile : potentialTiles) {
                 Unit other = b.getUnitAt(tile.x, tile.y);
                 if (other != null && other.getTribeId() != unit.getTribeId()) {

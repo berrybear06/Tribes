@@ -118,7 +118,7 @@ public class BuildRoadScr extends BaseScript {
 
     private void _calcHotspotsRecv(Vector2d position, RoadSpot[][] hotspots, Board board, int tribeId)
     {
-        LinkedList<Vector2d> neighs = position.neighborhood(1, 0, board.getSize());
+        List<Vector2d> neighs = position.neighborhood(1, 0, board.getSize());
 
         for (Vector2d neighPos : neighs) {
             if(hotspots[neighPos.x][neighPos.y] == null) {

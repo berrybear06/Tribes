@@ -209,7 +209,7 @@ public class Tribe extends Actor {
         Vector2d center = new Vector2d(x, y);
         boolean requiresNetworkUpdate = false;
 
-        LinkedList<Vector2d> tiles = center.neighborhood(range, 0, size);
+        List<Vector2d> tiles = center.neighborhood(range, 0, size);
         tiles.add(center);
 
         for(Vector2d tile : tiles)

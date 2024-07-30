@@ -479,7 +479,7 @@ public class Board {
 
             while (!moved && j < TribesConfig.NUM_STEPS * 3) {
                 //Pick a neighbour tile at random
-                LinkedList<Vector2d> neighs = currentPos.neighborhood(1,0, size);
+                List<Vector2d> neighs = currentPos.neighborhood(1,0, size);
                 Vector2d next = neighs.get(rnd.nextInt(neighs.size()));
 
                 if (traversable(next.x, next.y, tribeId)) {
@@ -578,7 +578,7 @@ public class Board {
     void assignCityTiles(City c, int radius){
         Vector2d cityPos = c.getPosition();
         Tribe t = getTribe(c.getTribeId());
-        LinkedList<Vector2d> tiles = cityPos.neighborhood(radius, 0, size);
+        List<Vector2d> tiles = cityPos.neighborhood(radius, 0, size);
         tiles.add(new Vector2d(cityPos));
         for(Vector2d tile : tiles)
         {

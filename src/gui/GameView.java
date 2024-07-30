@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 
 import core.Types;
 import core.actions.cityactions.CityAction;
@@ -230,7 +231,7 @@ public class GameView extends JComponent {
         for(int i = 0; i < gridSize; ++i) {
             for (int j = 0; j < gridSize; ++j) {
                 Vector2d cur = new Vector2d(i, j);
-                LinkedList<Vector2d> neighborhood = cur.neighborhood(1, 0, gridSize);
+                List<Vector2d> neighborhood = cur.neighborhood(1, 0, gridSize);
                 boolean anyRoads = false;
                 if (board.checkTradeNetwork(i, j)) {
                     for (Vector2d n: neighborhood) {

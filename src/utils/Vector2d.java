@@ -1,6 +1,6 @@
 package utils;
 
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * This class represents a vector, or a position, in the map.
@@ -329,7 +329,16 @@ public class Vector2d
 
     @Override
     public int hashCode() {
-        return x * 20 + y;
+        return Objects.hash(x, y);
+    }
+
+    private record CacheKey(int x, int y, int radius, int min, int max) {}
+
+    private static Map<CacheKey, List<Vector2d>> neighborhoodCache = new HashMap<>();
+
+    public List<Vector2d> neighborhood(int radius, int min, int max) {
+        CacheKey key = new CacheKey(x, y, radius, min, max);
+        return neighborhoodCache.computeIfAbsent(key, k -> calculateNeighborhood(radius, min, max));
     }
 
     /**
@@ -340,9 +349,8 @@ public class Vector2d
      * @param max the maximum value to keep it in bounds (exclusive).
      * @return A list of neighbors.
      */
-    public LinkedList<Vector2d> neighborhood(int radius, int min, int max)
-    {
-        LinkedList<Vector2d> vectors = new LinkedList<>();
+    private List<Vector2d> calculateNeighborhood(int radius, int min, int max) {
+        List<Vector2d> vectors = new ArrayList<>();
 
         for(int i = x - radius; i <= x + radius; i++) {
             for(int j = y - radius; j <= y + radius; j++) {

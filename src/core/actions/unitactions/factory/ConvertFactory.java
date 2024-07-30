@@ -10,6 +10,7 @@ import core.game.GameState;
 import utils.Vector2d;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class ConvertFactory implements ActionFactory {
 
@@ -23,7 +24,7 @@ public class ConvertFactory implements ActionFactory {
             Board b = gs.getBoard();
             Vector2d position = unit.getPosition();
 
-            LinkedList<Vector2d> potentialTiles = position.neighborhood(unit.RANGE, 0, b.getSize()); //use neighbourhood for board limits
+            List<Vector2d> potentialTiles = position.neighborhood(unit.RANGE, 0, b.getSize()); //use neighbourhood for board limits
             for (Vector2d tile : potentialTiles) {
                 Unit target = b.getUnitAt(tile.x, tile.y);
                 if(target != null && target.getTribeId() != unit.getTribeId())

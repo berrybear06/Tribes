@@ -13,7 +13,7 @@ import players.portfolio.scripts.utils.ValuePoint;
 import utils.Pair;
 import utils.Vector2d;
 
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class MoveToAttackRangeScr extends BaseScript {
@@ -35,7 +35,7 @@ public class MoveToAttackRangeScr extends BaseScript {
                 Board b = gs.getBoard();
                 int attackRange = ((Unit)ac).RANGE;
                 Vector2d targetPos = new Vector2d(posX, posY);
-                LinkedList<Vector2d> neighs = targetPos.neighborhood(attackRange, 0, b.getSize());
+                List<Vector2d> neighs = targetPos.neighborhood(attackRange, 0, b.getSize());
 
                 int maxTargets = neighs.size();
                 int numTargets = 0;

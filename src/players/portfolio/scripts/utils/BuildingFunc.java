@@ -11,7 +11,7 @@ import utils.Utils;
 import utils.Vector2d;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import static core.Types.BUILDING.*;
@@ -48,7 +48,7 @@ public class BuildingFunc {
     public double evalNeighSupportBuilding(Vector2d centrePos, GameState gs, Types.BUILDING target)
     {
         int goodNeigh = 0;
-        LinkedList<Vector2d> neighs = centrePos.neighborhood(1, 0, gs.getBoard().getSize());
+        List<Vector2d> neighs = centrePos.neighborhood(1, 0, gs.getBoard().getSize());
         for(Vector2d neighPos : neighs)
         {
             goodNeigh += goodNeighbourFor(gs, neighPos, target) ? 1 : 0;
@@ -119,7 +119,7 @@ public class BuildingFunc {
             Vector2d targetPos = action.getTargetPos();
 
             if(action.getBuildingType() == toBuild) {
-                LinkedList<Vector2d> neighs = targetPos.neighborhood(1, 0, gs.getBoard().getSize());
+                List<Vector2d> neighs = targetPos.neighborhood(1, 0, gs.getBoard().getSize());
 
                 double bestForBonus = 0;
                 for (Vector2d neighPos : neighs) {
@@ -176,7 +176,7 @@ public class BuildingFunc {
             boolean valid = validConstruction(gs, position, target, cityId, false);
             if (valid) {
                 // b. Check if this is a good place for a base building: would it neighbour any good place for a support building?
-                LinkedList<Vector2d> neighs = position.neighborhood(1, 0, gs.getBoard().getSize());
+                List<Vector2d> neighs = position.neighborhood(1, 0, gs.getBoard().getSize());
 
                 for (Vector2d neighPos : neighs) {
                     Types.BUILDING supportBuilding = target.getMatchingBuilding();
