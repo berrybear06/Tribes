@@ -657,8 +657,9 @@ public class GameView extends JComponent {
     }
 
     void zoom(double zoomFactor, int focusX, int focusY) {
-        panTranslate.subtract((int)((focusX - panTranslate.x) * (zoomFactor - 1.0)),
+        Vector2d offset = new Vector2d((int)((focusX - panTranslate.x) * (zoomFactor - 1.0)),
                 (int)((focusY - panTranslate.y) * (zoomFactor - 1.0)));
+        panTranslate = Vector2d.subtract(panTranslate, offset);
     }
 
     void setPanToTribe(GameState gs) {
@@ -955,8 +956,8 @@ public class GameView extends JComponent {
                 // Next position, move closer to target
                 int xDir = (int) (CELL_SIZE * animationSpeed.get(i) * Math.signum(target.getSecond().x - currentPosition.x));
                 int yDir = (int) (CELL_SIZE * animationSpeed.get(i) * Math.signum(target.getSecond().y - currentPosition.y));
-                source.getSecond().add(xDir, yDir);
-                Vector2d nextPosition = source.getSecond().copy();
+                Vector2d nextPosition = Vector2d.add(source.getSecond(), new Vector2d(xDir, yDir));
+                source = new Pair<>(source.getFirst(), nextPosition.copy());
 
                 // Rotate image in direction of travel
                 double dx = nextPosition.x - currentPosition.x;

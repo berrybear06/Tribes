@@ -13,12 +13,12 @@ public class Vector2d
     /**
      * X-coordinate of the vector.
      */
-    public int x;
+    public final int x;
 
     /**
      * Y-coordinate of the vector.
      */
-    public int y;
+    public final int y;
 
     /**
      * Default constructor.
@@ -80,32 +80,6 @@ public class Vector2d
         return new Vector2d(x,y);
     }
 
-    /**
-     * Sets this vector's coordinates to the coordinates of another vector.
-     * @param v that other vector.
-     */
-    public void set(Vector2d v) {
-        this.x = v.x;
-        this.y = v.y;
-    }
-
-    /**
-     * Sets this vector's coordinates to the coordinates given.
-     * @param x x coordinate.
-     * @param y y coordinate.
-     */
-    public void set(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    /**
-     * Sets the vector's coordinates to (0,0)
-     */
-    public void zero() {
-        x = 0;
-        y = 0;
-    }
 
     /**
      * Returns a representative String of this vector.
@@ -117,106 +91,67 @@ public class Vector2d
     }
 
     /**
-     * Adds another vector to this.
-     * @param v vector to add.
-     * @return this, after the addition.
+     * Adds two vectors
+     * @param a first vector
+     * @param b second vector
+     * @return returns the vector a+b.
      */
-    public Vector2d add(Vector2d v) {
-        Vector2d newVec = new Vector2d(this.x, this.y);
-        newVec.x += v.x;
-        newVec.y += v.y;
-        return newVec;
+    public static Vector2d add(Vector2d a, Vector2d b) {
+        return new Vector2d(a.x + b.x, a.y + b.y);
+    }
+
+    public Vector2d add(Vector2d b) {
+        return add(this, b);
     }
 
     /**
-     * Adds to this vector two coordinates
-     * @param x x coordinate
-     * @param y y coordinate
-     * @return returns this, after the addition.
+     * Subtracts one vector from another
+     * @param a first vector
+     * @param b second vector
+     * @return returns the vector a-b.
      */
-    public Vector2d add(int x, int y) {
-        this.x += x;
-        this.y += y;
-        return this;
+    public static Vector2d subtract(Vector2d a, Vector2d b) {
+        return new Vector2d(a.x - b.x, a.y - b.y);
+    }
+
+    public Vector2d subtract(Vector2d b) {
+        return subtract(this, b);
     }
 
     /**
-     * Adds to this vector another vector, scaled it by a factor..
-     * @param v Vector to add, to be scaled by w
-     * @param w Scale of v.
-     * @return this vector, after the addition.
+     * Multiplies a vector by a factor.
+     * @param v vector
+     * @param fac factor to multiply v by.
+     * @return the vector v*fac.
      */
-    public Vector2d add(Vector2d v, int w) {
-        // weighted addition
-        this.x += w * v.x;
-        this.y += w * v.y;
-        return this;
+    public static Vector2d mul(Vector2d v, int fac) {
+        return new Vector2d(v.x * fac, v.y * fac);
     }
 
-    /**
-     * Performs a wrap operation over this vector.
-     * @param w width
-     * @param h height
-     * @return This vector, after the wrap.
-     */
-    public Vector2d wrap(int w, int h) {
-//        w = 2 * w;
-//        h = 2 * h;
-        x = (x + w) % w;
-        y = (y + h) % h;
-        return this;
-    }
-
-    /**
-     * Subtracts another vector from this.
-     * @param v vector to subtract.
-     * @return this, after the subtraction.
-     */
-    public Vector2d subtract(Vector2d v) {
-        Vector2d newVec = new Vector2d(this.x, this.y);
-        newVec.x -= v.x;
-        newVec.y -= v.y;
-        return newVec;
-    }
-
-    /**
-     * Subtracts two coordinates to this vector.
-     * @param x x coordinate
-     * @param y y coordinate
-     * @return returns this, after the subtraction.
-     */
-    public Vector2d subtract(int x, int y) {
-        this.x -= x;
-        this.y -= y;
-        return this;
-    }
-
-    /**
-     * Multiplies this vector by a factor.
-     * @param fac factor to multiply this vector by.
-     * @return This vector, after the operation.
-     */
     public Vector2d mul(int fac) {
-        x *= fac;
-        y *= fac;
-        return this;
+        return mul(this, fac);
     }
 
     /**
-     * Rotates the vector an angle given, in radians.
-     * @param theta angle given, in radians
+     * Rotates a vector by an angle in radians.
+     * @param v vector
+     * @param theta angle in radians
+     * @return the rotated vector
      */
-    public void rotate(int theta) {
+    public static Vector2d rotate(Vector2d v, double theta) {
         // rotate this vector by the angle made to the horizontal by this line
         // theta is in radians
         double cosTheta = Math.cos(theta);
         double sinTheta = Math.sin(theta);
 
-        int nx = (int)(x * cosTheta - y * sinTheta);
-        int ny = (int)(x * sinTheta + y * cosTheta);
+        int nx = (int)(v.x * cosTheta - v.y * sinTheta);
+        int ny = (int)(v.x * sinTheta + v.y * cosTheta);
 
-        x = nx;
-        y = ny;
+        return new Vector2d(nx, ny);
+    }
+
+    public Vector2d rotate(double theta) {
+        return rotate(this, theta);
     }
 
     /**
@@ -291,17 +226,20 @@ public class Vector2d
     }
 
     /**
-     * Normalises this vector.
+     * Normalises a vector.
      */
-    public void normalise() {
-        double mag = mag();
+    public static Vector2d normalise(Vector2d v) {
+        double mag = v.mag();
         if(mag == 0)
         {
-            x = y = 0;
+            return new Vector2d(0, 0);
         }else{
-            x /= mag;
-            y /= mag;
+            return new Vector2d((int) (v.x / mag), (int) (v.y / mag));
         }
+    }
+
+    public Vector2d normalise() {
+        return normalise(this);
     }
 
     /**
@@ -362,7 +300,7 @@ public class Vector2d
                 }
             }
         }
-        return vectors;
+        return Collections.unmodifiableList(vectors);
     }
 
     public static double manhattanDistance(Vector2d p1, Vector2d p2)
