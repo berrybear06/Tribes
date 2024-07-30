@@ -134,7 +134,7 @@ public class Play {
 
         long agentSeed = AGENT_SEED == -1 ? System.currentTimeMillis() + new Random().nextInt() : AGENT_SEED;
 
-        Game game = _loadGame(playerTypes, saveGameFile, agentSeed);
+        Game game = _loadGame(playerTypes, saveGameFile, agentSeed, ac);
         Run.runGame(game, ki, ac);
     }
 
@@ -185,7 +185,7 @@ public class Play {
 
         for(int i = 0; i < playerTypes.length; ++i)
         {
-            Agent ag = Run.getAgent(playerTypes[i], agentSeed);
+            Agent ag = Run.getAgent(playerTypes[i], agentSeed, ac);
             assert ag != null;
             ag.setPlayerIDs(i, allIds);
             players.add(ag);
@@ -193,7 +193,7 @@ public class Play {
         return players;
     }
 
-    private static Game _loadGame(Run.PlayerType[] playerTypes, String saveGameFile, long agentSeed)
+    private static Game _loadGame(Run.PlayerType[] playerTypes, String saveGameFile, long agentSeed, ActionController ac)
     {
         ArrayList<Agent> players = new ArrayList<>();
         ArrayList<Integer> allIds = new ArrayList<>();
@@ -202,7 +202,7 @@ public class Play {
 
         for(int i = 0; i < playerTypes.length; ++i)
         {
-            Agent ag = Run.getAgent(playerTypes[i], agentSeed);
+            Agent ag = Run.getAgent(playerTypes[i], agentSeed, ac);
             assert ag != null;
             ag.setPlayerIDs(i, allIds);
             players.add(ag);

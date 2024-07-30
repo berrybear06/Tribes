@@ -204,4 +204,9 @@ class Run {
         }
         return null;
     }
+
+    public static Agent getAgent(Run.PlayerType playerType, long agentSeed, ActionController ac) {
+        if (playerType == PlayerType.HUMAN) return new HumanAgent(ac);
+        return getAgent(playerType, agentSeed);
+    }
 }

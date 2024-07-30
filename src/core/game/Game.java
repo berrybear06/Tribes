@@ -362,17 +362,20 @@ public class Game {
                         action = ag.act(gameStateObservations[playerID], ect);
                         remainingECT = ect.remainingTimeMillis(); // Note down the remaining time to use it for the next iteration
 
-                        if (LOG_STATS && !isHumanPlayer)
-                            updateBranchingFactor(aiStats[playerID], gs.getTick(), gameStateObservations[playerID], ag);
+                        // If human player hasn't inputted an action, skip processing
+                        if (action != null || !isHumanPlayer) {
+                            if (LOG_STATS && !isHumanPlayer)
+                                updateBranchingFactor(aiStats[playerID], gs.getTick(), gameStateObservations[playerID], ag);
 
-                        if(LOG_STATS)
-                            updateGameplayStatsMove(gpStats[playerID], action, gameStateObservations[playerID]);
+                            if (LOG_STATS)
+                                updateGameplayStatsMove(gpStats[playerID], action, gameStateObservations[playerID]);
 
-                        curActionCounter++;
+                            curActionCounter++;
 
-                        if (actionDelayTimer != null) {  // Reset action delay timer for next action request
-                            actionDelayTimer = new ElapsedCpuTimer();
-                            actionDelayTimer.setMaxTimeMillis(FRAME_DELAY);
+                            if (actionDelayTimer != null) {  // Reset action delay timer for next action request
+                                actionDelayTimer = new ElapsedCpuTimer();
+                                actionDelayTimer.setMaxTimeMillis(FRAME_DELAY);
+                            }
                         }
 
                         // Continue this turn if there are still available actions and end turn was not requested.
