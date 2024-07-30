@@ -285,7 +285,7 @@ public class InfoView extends JComponent {
 
         StringBuilder sb = new StringBuilder();
         if(c != null) {
-            sb.append("<h1>" + Types.TRIBE.values()[c.getTribeId()] + " city " + cityID + "</h1>");
+            sb.append("<h1>" + board.getTribe(c.getTribeId()).getType() + " city " + cityID + "</h1>");
 //            sb.append("<table border=\"0\"><tr><td><img width=\"" + CELL_SIZE + "\" src=\"file:" + Types.TERRAIN.CITY.getImageStr() + "\"/></p></td><td>");
             sb.append("<ul>");
             sb.append("<li><b>Is Capital:</b> " + c.isCapital() + "</li>");
