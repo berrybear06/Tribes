@@ -39,6 +39,6 @@ public class CityAction extends Action {
             return false;
         CityAction other = (CityAction) o;
 
-        return cityId == other.cityId && actionType == other.actionType && targetPos == other.getTargetPos();
+        return cityId == other.cityId && actionType == other.actionType && targetPos == other.targetPos;
     }
 }

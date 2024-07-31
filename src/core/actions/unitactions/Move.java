@@ -47,7 +47,7 @@ public class Move extends UnitAction
     @Override
     public Action copy() {
         Move move = new Move(this.unitId);
-        move.setDestination(this.destination);
+        move.destination = this.destination;
         return move;
     }
 

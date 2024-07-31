@@ -131,7 +131,7 @@ public class TechnologyTree {
      */
    public boolean researchAtRandom(Random rnd)
    {
-       if(isEverythingResearched()) return false;
+       if(everythingResearched) return false;
 
        ArrayList<Types.TECHNOLOGY> available = new ArrayList<>();
        for(Types.TECHNOLOGY tech : Types.TECHNOLOGY.values())

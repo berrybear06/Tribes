@@ -33,7 +33,7 @@ public class Ship extends Unit
         c.setMaxHP(getMaxHP());
         c.setActorId(getActorId());
         c.setStatus(getStatus());
-        c.setBaseLandUnit(getBaseLandUnit());
+        c.baseLandUnit = baseLandUnit;
         return hideInfo ? (Ship) c.hide() : c;
     }
 }

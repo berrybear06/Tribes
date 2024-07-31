@@ -33,7 +33,7 @@ public class LevelUp extends CityAction {
     @Override
     public Action copy() {
         LevelUp lUp = new LevelUp(this.cityId);
-        lUp.setBonus(this.bonus);
+        lUp.bonus = this.bonus;
         lUp.setTargetPos(this.targetPos);
         return lUp;
     }

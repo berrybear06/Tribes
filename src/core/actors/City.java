@@ -37,7 +37,7 @@ public class City extends Actor{
     private int pointsWorth;
 
     // List of IDs of units controlled by this city.
-    private ArrayList<Integer> unitsID = new ArrayList<>();
+    private ArrayList<Integer> unitsID = new ArrayList<>(0);
 
     //List of buildings that belong to this city.
     private LinkedList<Building> buildings = new LinkedList<>();
@@ -363,8 +363,8 @@ public class City extends Actor{
         c.hasWalls = hasWalls;
         c.bound = bound;
         c.actorId = actorId;
-        c.setBuildings(copyBuildings());
-        c.setUnitsID(hideInfo ? new ArrayList<>() : new ArrayList<>(unitsID));
+        c.buildings = copyBuildings();
+        c.unitsID = hideInfo ? new ArrayList<>(0) : new ArrayList<>(unitsID);
         return c;
     }
 
@@ -388,10 +388,6 @@ public class City extends Actor{
 
     public int getPopulation_need() {
         return population_need;
-    }
-
-    private void setUnitsID(ArrayList<Integer> unitsID) {
-        this.unitsID = unitsID;
     }
 
     public void setBuildings(LinkedList<Building> buildings) {

@@ -49,7 +49,7 @@ public class Spawn extends CityAction
     @Override
     public Action copy() {
         Spawn spawn = new Spawn(this.cityId);
-        spawn.setUnitType(this.unit_type);
+        spawn.unit_type = this.unit_type;
         spawn.setTargetPos(this.targetPos);
         return spawn;
     }

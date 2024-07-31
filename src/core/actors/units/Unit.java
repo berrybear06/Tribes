@@ -64,7 +64,7 @@ public abstract class Unit extends Actor
         this.kills++;
         //Persist skill
         if(getType() == Types.UNIT.KNIGHT) {
-            this.setStatus(ATTACKED);
+            this.status = ATTACKED;
         }
     }
 

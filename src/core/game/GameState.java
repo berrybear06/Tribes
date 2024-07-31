@@ -261,15 +261,12 @@ public class GameState {
             return false;
 
         //Just one action for a city or a unit makes this question false.
-        int nActions = 0;
-        for(int cityId : cityActions.keySet())
+        for (ArrayList<Action> actions : cityActions.values())
         {
-            nActions += cityActions.get(cityId).size();
-            if(nActions>0) return true;
+            if (!actions.isEmpty()) return true;
         }
-        for(int cityId : unitActions.keySet()) {
-            nActions += unitActions.get(cityId).size();
-            if(nActions>0) return true;
+        for (ArrayList<Action> actions : unitActions.values()) {
+            if (!actions.isEmpty()) return true;
         }
 
         //No city or unit actions - if there's only one (EndTurn) tribe action, there are no actions available.
@@ -414,7 +411,7 @@ public class GameState {
         //Get all cities of this tribe
         ArrayList<Integer> tribeCities = tribe.getCitiesID();
         ArrayList<Integer> allTribeUnits = new ArrayList<>();
-        this.setEndTurn(false);
+        this.turnMustEnd = false;
 
         //1. Compute stars per turn.
         int acumProd = 0;
@@ -769,12 +766,12 @@ public class GameState {
      */
     public ArrayList<Action> getAllAvailableActions()
     {
-        ArrayList<Action> allActions = new ArrayList<>(this.getTribeActions());
-        for (Integer cityId : this.getCityActions().keySet())
+        ArrayList<Action> allActions = new ArrayList<>(this.tribeActions);
+        for (Integer cityId : this.cityActions.keySet())
         {
             allActions.addAll(this.getCityActions(cityId));
         }
-        for (Integer unitId : this.getUnitActions().keySet())
+        for (Integer unitId : this.unitActions.keySet())
         {
             allActions.addAll(this.getUnitActions(unitId));
         }
@@ -799,7 +796,7 @@ public class GameState {
     public ArrayList<Action> getAllCityActions()
     {
         ArrayList<Action> allActions = new ArrayList<>();
-        for (Integer cityId : this.getCityActions().keySet())
+        for (Integer cityId : this.cityActions.keySet())
             allActions.addAll(this.getCityActions(cityId));
 
         return allActions;
@@ -811,7 +808,7 @@ public class GameState {
     public ArrayList<Action> getAllUnitActions()
     {
         ArrayList<Action> allActions = new ArrayList<>();
-        for (Integer unitId : this.getUnitActions().keySet())
+        for (Integer unitId : this.unitActions.keySet())
             allActions.addAll(this.getUnitActions(unitId));
 
         return allActions;

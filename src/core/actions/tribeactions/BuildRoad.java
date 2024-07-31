@@ -33,7 +33,7 @@ public class BuildRoad extends TribeAction {
     @Override
     public Action copy() {
         BuildRoad buildRoad = new BuildRoad(this.tribeId);
-        buildRoad.setPosition(position);
+        buildRoad.position = position;
         return buildRoad;
     }
 

@@ -35,7 +35,7 @@ public class Build extends CityAction
     @Override
     public Action copy() {
         Build build = new Build(this.cityId);
-        build.setBuildingType(this.buildingType);
+        build.buildingType = this.buildingType;
         build.setTargetPos(this.targetPos);
         return build;
     }

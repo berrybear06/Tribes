@@ -33,7 +33,7 @@ public class DeclareWar extends TribeAction {
     @Override
     public Action copy(){
         DeclareWar declareWar = new DeclareWar(this.tribeId);
-        declareWar.setTargetID(targetID);
+        declareWar.targetID = targetID;
         return declareWar;
     }
 

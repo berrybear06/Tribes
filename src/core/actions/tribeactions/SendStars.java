@@ -32,8 +32,8 @@ public class SendStars extends TribeAction{
     @Override
     public Action copy(){
         SendStars sendStars = new SendStars(this.tribeId);
-        sendStars.setNumStars(numStars);
-        sendStars.setTargetID(targetID);
+        sendStars.numStars = numStars;
+        sendStars.targetID = targetID;
         return sendStars;
     }
 

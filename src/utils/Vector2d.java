@@ -267,7 +267,7 @@ public class Vector2d
 
     @Override
     public int hashCode() {
-        return Objects.hash(x, y);
+        return x * 100000 + y;
     }
 
     private record CacheKey(int x, int y, int radius, int min, int max) {}
@@ -287,7 +287,7 @@ public class Vector2d
     }
 
     private static List<Vector2d> calculateNeighborhood(CacheKey k) {
-        List<Vector2d> vectors = new ArrayList<>();
+        List<Vector2d> vectors = new ArrayList<>(8);
 
         for(int i = k.x - k.radius; i <= k.x + k.radius; i++) {
             for(int j = k.y - k.radius; j <= k.y + k.radius; j++) {

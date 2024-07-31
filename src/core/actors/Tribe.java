@@ -416,8 +416,8 @@ public class Tribe extends Actor {
         //The tech boost is only available when playing with partial observability
         if(!Constants.PLAY_WITH_FULL_OBS) {
             //Pick a technology at random from the tribe to learn
-            TechnologyTree thisTribeTree = getTechTree();
-            TechnologyTree metTribeTree = tribes[tribeID].getTechTree();
+            TechnologyTree thisTribeTree = techTree;
+            TechnologyTree metTribeTree = tribes[tribeID].techTree;
             ArrayList<Types.TECHNOLOGY> potentialTechForThisTribe = new ArrayList<>();
 
             for (Types.TECHNOLOGY tech : Types.TECHNOLOGY.values()) {
@@ -611,7 +611,7 @@ public class Tribe extends Actor {
 
     public void manageLoss(GameState gs) {
 
-        this.setWinner(Types.RESULT.LOSS);
+        this.winner = Types.RESULT.LOSS;
 
         //All units must disappear.
         for(int cityId : citiesID)

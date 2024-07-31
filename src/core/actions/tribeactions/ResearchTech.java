@@ -35,7 +35,7 @@ public class ResearchTech extends TribeAction {
     @Override
     public Action copy() {
         ResearchTech resTech = new ResearchTech(this.tribeId);
-        resTech.setTech(this.tech);
+        resTech.tech = this.tech;
         return resTech;
     }
 
@@ -49,6 +49,6 @@ public class ResearchTech extends TribeAction {
             return false;
         ResearchTech other = (ResearchTech) o;
 
-        return super.equals(other) && tech == other.getTech();
+        return super.equals(other) && tech == other.tech;
     }
 }

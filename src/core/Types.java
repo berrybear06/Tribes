@@ -60,7 +60,7 @@ public class Types {
             if (children == null) {
                 ArrayList<TECHNOLOGY> c = new ArrayList<>();
                 for (TECHNOLOGY t : TECHNOLOGY.values()) {
-                    if (t.getParentTech() == this) {
+                    if (t.parent == this) {
                         c.add(t);
                     }
                 }

@@ -48,7 +48,7 @@ public class ResourceGathering extends CityAction
     @Override
     public Action copy() {
         ResourceGathering res = new ResourceGathering(this.cityId);
-        res.setResource(this.resource);
+        res.resource = this.resource;
         res.setTargetPos(targetPos);
         return res;
     }

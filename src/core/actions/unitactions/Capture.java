@@ -64,8 +64,8 @@ public class Capture extends UnitAction
     @Override
     public Action copy() {
         Capture capture = new Capture(this.unitId);
-        capture.setTargetCity(this.targetCityId);
-        capture.setCaptureType(this.captureType);
+        capture.targetCityId = this.targetCityId;
+        capture.captureType = this.captureType;
         return capture;
     }
 

@@ -41,7 +41,7 @@ public class Convert extends UnitAction
     @Override
     public Action copy() {
         Convert convert = new Convert(this.unitId);
-        convert.setTargetId(this.targetId);
+        convert.targetId = this.targetId;
         return convert;
     }
 

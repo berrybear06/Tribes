@@ -49,6 +49,6 @@ public class Examine extends UnitAction
             return false;
         Examine other = (Examine) o;
 
-        return super.equals(other) && bonus == other.getBonus();
+        return super.equals(other) && bonus == other.bonus;
     }
 }

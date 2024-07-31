@@ -49,7 +49,7 @@ public class StepMove implements NeighbourHelper
     //costFrom: is the total move cost computed up to "from"
     //Using this.gs, this.unit, from and costFrom, gets all the adjacent neighbours to tile in position "from"
     public ArrayList<PathNode> getNeighbours(Vector2d from, double costFrom) {
-        ArrayList<PathNode> neighbours = new ArrayList<>();
+        ArrayList<PathNode> neighbours = new ArrayList<>(8);
 
         //Check if the unit has reached the limit of it's movement range
         if (costFrom >= unit.MOV) {

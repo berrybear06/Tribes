@@ -36,7 +36,7 @@ public class Attack extends UnitAction
     @Override
     public Action copy() {
         Attack attack = new Attack(this.unitId);
-        attack.setTargetId(this.targetId);
+        attack.targetId = this.targetId;
         return attack;
     }
 
