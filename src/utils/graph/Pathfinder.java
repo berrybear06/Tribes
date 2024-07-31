@@ -2,6 +2,7 @@ package utils.graph;
 
 import utils.Vector2d;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -52,59 +53,26 @@ public class Pathfinder
 
     private ArrayList<PathNode> _dijkstra()
     {
-        nodes = new HashSet<>();
-
-        root.setVisited(true);
         root.setTotalCost(0.0);
 
         ArrayList<PathNode> destinationsFromStart = new ArrayList<>();
-        PathNode node;
-
         PriorityQueue<PathNode> openList = new PriorityQueue<>();
         HashSet<PathNode> visited = new HashSet<>();
-        visited.add(root);
-        openList.add(root);
-        nodes.add(root);
 
+        openList.add(root);
         while (!openList.isEmpty())
         {
-            node = openList.poll();
-            //nodes.add(node);
-//            System.out.println("Remaining in list: " + openList.size());
+            PathNode current = openList.poll();
+            if (visited.contains(current)) continue;
+            visited.add(current);
+            if (current != root) destinationsFromStart.add(current);
 
-            if (!destinationsFromStart.contains(node) && (node != root))
-            {
-                destinationsFromStart.add(node);
-            }
-
-            ArrayList<PathNode> neighbours = provider.getNeighbours(node.getPosition(), node.getTotalCost());
+            ArrayList<PathNode> neighbours = provider.getNeighbours(current.getPosition(), current.getTotalCost());
             for (PathNode nb : neighbours) {
-                double nbCost = nb.getTotalCost();
-
-                boolean inCache = false;
-
-                PathNode neighbour = null;
-                if (nodes != null) {
-                    for (PathNode n2 : nodes) {
-                        if (nb.equals(n2)) {
-                            neighbour = n2;
-                            inCache = true;
-                            break;
-                        }
-                    }
-                }
-                if (neighbour == null) {
-                    neighbour = nb;  // Node was not found in cache
-                }
-
-                if (!visited.contains(neighbour)) {
-                    neighbour.setVisited(true);
-                    visited.add(neighbour);
-                    neighbour.setTotalCost(nbCost + node.getTotalCost());
-                    openList.add(neighbour);
-                    nodes.add(neighbour);
-                } else if (nbCost + node.getTotalCost() < neighbour.getTotalCost()) {
-                    neighbour.setTotalCost(nbCost + node.getTotalCost());
+                if (!visited.contains(nb)) {
+                    double nbCost = current.getTotalCost() + nb.getTotalCost();
+                    nb.setTotalCost(nbCost);
+                    openList.add(nb);
                 }
             }
         }

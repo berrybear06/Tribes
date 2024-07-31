@@ -16,6 +16,7 @@ public class StepMove implements NeighbourHelper
     private GameState gs;
     private Unit unit;
     private boolean[][] zoneOfControlMap;
+    private static final double MAX_STEP_COST = 1e9; // Moves that prohibit further movement will have this cost
 
     public StepMove(GameState curGameState, Unit movingUnit)
     {
@@ -51,7 +52,7 @@ public class StepMove implements NeighbourHelper
         ArrayList<PathNode> neighbours = new ArrayList<>();
 
         //Check if the unit has reached the limit of it's movement range
-        if (costFrom == unit.MOV) {
+        if (costFrom >= unit.MOV) {
             return neighbours;
         }
 
@@ -61,9 +62,7 @@ public class StepMove implements NeighbourHelper
         //Check if unit is on a neutral or a friendly road, cities also count as roads.
         if(board.isRoad(from.x, from.y) || board.getTerrainAt(from.x, from.y) == Types.TERRAIN.CITY){
             int cityId = board.getCityIdAt(from.x, from.y);
-            if(cityId == -1 || board.getTribe(unit.getTribeId()).controlsCity(cityId)) {
-                onRoad = true;
-            }
+            onRoad = cityId == -1 || board.getTribe(unit.getTribeId()).controlsCity(cityId);
         }
 
         //Each one of the tree nodes added to "neighbours" must have a position (x,y) and also the cost of moving there from "from":
@@ -71,8 +70,6 @@ public class StepMove implements NeighbourHelper
         //We only add nodes to neighbours if costFrom+stepCost <= total move range of this.unit
         for(Vector2d tile : from.neighborhood(1, 0, board.getSize())) {
             Types.TERRAIN terrain = board.getTerrainAt(tile.x, tile.y);
-            double stepCost = 0.0;
-            boolean zoneOfControl = false;
 
             //Can't move to tiles where there's a non-friendly unit
             Unit otherUnit = board.getUnitAt(tile.x, tile.y);
@@ -82,20 +79,16 @@ public class StepMove implements NeighbourHelper
             }
 
             //Check if there is an enemy unit adjacent to the destination.
-            zoneOfControl = zoneOfControlMap[tile.x][tile.y];
+            boolean zoneOfControl = zoneOfControlMap[tile.x][tile.y];
 
-            //Cannot move into tiles that have not been discovered yet.
-            if (!gs.getTribe(unit.getTribeId()).isVisible(tile.x, tile.y)) {
+            // Cannot move into tiles that have not been discovered yet.
+            // Check if current research allows movement to this tile.
+            if (!gs.getTribe(unit.getTribeId()).isVisible(tile.x, tile.y) ||
+                    !board.traversable(tile.x, tile.y, unit.getTribeId()))
                 continue;
-            }
-
-            //Check if current research allows movement to this tile.
-            if (!board.traversable(tile.x, tile.y, unit.getTribeId())) {
-                continue;
-            }
 
             //Mind benders cannot move into an enemy city tile.
-            if (unit.getType() == Types.UNIT.MIND_BENDER && board.getTerrainAt(tile.x, tile.y) == Types.TERRAIN.CITY) {
+            if (unit.getType() == Types.UNIT.MIND_BENDER && terrain == Types.TERRAIN.CITY) {
                 City targetCity = (City) board.getActor(board.getCityIdAt(tile.x, tile.y));
                 //The city belongs to the enemy.
                 if (targetCity.getTribeId() != unit.getTribeId()) {
@@ -103,62 +96,53 @@ public class StepMove implements NeighbourHelper
                 }
             }
 
-
+            double stepCost;
             if (unit.getType().isWaterUnit()) //Unit is a water unit
             {
-                stepCost = stepCostWaterUnit(terrain, costFrom);
+                stepCost = stepCostWaterUnit(terrain);
             } else //Ground unit
             {
-                stepCost = stepCostGroundUnit(terrain, costFrom, board, tile);
-                if (stepCost == Double.MAX_VALUE) continue;
+                stepCost = stepCostGroundUnit(terrain, board, tile);
+                if (stepCost == -1.0) continue;
 
                 //If there is a friendly/neutral road connection between two tiles then the movement cost is halved.
                 //This movement boost applies only to ground units.
-                if (onRoad && (board.isRoad(tile.x, tile.y) || board.getTerrainAt(tile.x, tile.y) == Types.TERRAIN.CITY)) {
+                if (onRoad && (board.isRoad(tile.x, tile.y) || terrain == Types.TERRAIN.CITY)) {
                     int cityId = board.getCityIdAt(from.x, from.y);
                     if (cityId == -1 || board.getTribe(unit.getTribeId()).controlsCity(cityId)) {
-                        stepCost = Math.max(0.5, stepCost / 2.0);
+                        stepCost = 0.5;
                     }
                 }
             }
 
             // Moving to zone of control is never a problem, but it consumes all the rest of the movement.
-            if(zoneOfControl){
-                stepCost = costFrom < unit.MOV ? (unit.MOV - costFrom) : unit.MOV;
-                if(costFrom + stepCost <= unit.MOV)
-                    neighbours.add(new PathNode(tile, stepCost));
-
+            if(zoneOfControl)
+                stepCost = MAX_STEP_COST;
             //No zone of control, allow movement if part of MOV is still available.
-            }else if(Math.floor(costFrom + stepCost) <= unit.MOV){
-                neighbours.add(new PathNode(tile, stepCost));
-            }
-
-
+            neighbours.add(new PathNode(tile, stepCost));
         }
         return neighbours;
     }
 
-    private double stepCostWaterUnit(Types.TERRAIN terrain, double costFrom) {
+    private double stepCostWaterUnit(Types.TERRAIN terrain) {
         return switch (terrain) {
-            case CITY, PLAIN, FOREST, VILLAGE, MOUNTAIN ->
-                //Disembark takes a turn of movement.
-                costFrom < unit.MOV ? (unit.MOV - costFrom) : unit.MOV; //as much cost as needed to finished step here
+            case CITY, PLAIN, FOREST, VILLAGE, MOUNTAIN -> MAX_STEP_COST; //Disembark takes a turn of movement.
             default -> 1.0;
         };
     }
 
-    private double stepCostGroundUnit(Types.TERRAIN terrain, double costFrom, Board board, Vector2d tile) {
+    private double stepCostGroundUnit(Types.TERRAIN terrain, Board board, Vector2d tile) {
         switch (terrain) {
             case SHALLOW_WATER, DEEP_WATER -> {
                 //Embarking takes a turn of movement.
                 if (board.getBuildingAt(tile.x, tile.y) == Types.BUILDING.PORT) {
-                    return costFrom < unit.MOV ? (unit.MOV - costFrom) : unit.MOV; //as much cost as needed to finished step here;
+                    return MAX_STEP_COST;
                 } else {
-                    return Double.MAX_VALUE;
+                    return -1.0; // Invalid move
                 }
             }
             case FOREST, MOUNTAIN -> {
-                return costFrom < unit.MOV ? (unit.MOV - costFrom) : unit.MOV; //as much cost as needed to finished step here
+                return MAX_STEP_COST;
             }
             default -> {
                 return 1.0;

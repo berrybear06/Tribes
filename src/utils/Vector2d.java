@@ -300,7 +300,7 @@ public class Vector2d
                 }
             }
         }
-        return Collections.unmodifiableList(vectors);
+        return vectors;
     }
 
     public static double manhattanDistance(Vector2d p1, Vector2d p2)
