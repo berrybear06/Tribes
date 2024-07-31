@@ -9,18 +9,7 @@ public class PathNode implements Comparable<PathNode>
     private PathNode parent;
 
     private double totalCost = 0.0;
-    private double estimatedCost = 0.0;
-    private boolean visited = false;
-
-    public int MAX_CAPACITY = 10000;
-
-
-    public PathNode(Vector2d position)
-    {
-        this.parent = null;
-        this.position = position;
-        this.id = calcNodeId(position);
-    }
+    public static int MAX_CAPACITY = 10000;
 
     public PathNode(Vector2d position, double totalCost)
     {
@@ -45,10 +34,6 @@ public class PathNode implements Comparable<PathNode>
 
     public double getTotalCost() {return totalCost;}
     public void setTotalCost(double totalCost) {this.totalCost = totalCost;}
-    public double getEstimatedCost() {return estimatedCost;}
-    public void setEstimatedCost(double estimatedCost) { this.estimatedCost = estimatedCost; }
-    public boolean isVisited() {return visited;}
-    public void setVisited(boolean visited) {this.visited = visited;}
 
     public boolean equals(PathNode n)
     {
@@ -63,8 +48,7 @@ public class PathNode implements Comparable<PathNode>
 
     @Override
     public int compareTo(PathNode o) {
-//        return Double.compare(estimatedCost, o.estimatedCost);
-        return Double.compare(totalCost + estimatedCost, o.totalCost + o.estimatedCost);
+        return Double.compare(totalCost, o.totalCost);
     }
 
     @Override

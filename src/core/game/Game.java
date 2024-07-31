@@ -182,9 +182,6 @@ public class Game {
         Tribe[] tribeObjects = gs.getTribes();
 
         for (int tribeIdx = 0; tribeIdx < tribeObjects.length; ++tribeIdx) {
-            Tribe thisTribe = tribeObjects[tribeIdx];
-            core.Types.TRIBE tribeType = thisTribe.getType();
-
             ArrayList<Integer> allIds = new ArrayList<>();
             for (int i = 0; i < tribes.length; ++i) {
                 allIds.add(i);

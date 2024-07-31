@@ -1,7 +1,6 @@
 package core.actions.unitactions;
 
 import core.Types;
-import core.actors.City;
 import core.actors.Tribe;
 import core.actors.units.Unit;
 import core.game.Board;

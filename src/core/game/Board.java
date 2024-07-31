@@ -225,7 +225,7 @@ public class Board {
                 copyBoard.gameActors.put(id, actorCopy);
 
                 //If we're hiding info, the other tribes don't copy cityIDs and unitIDs by default in the arrays. But we need to copy the ones we see.
-                if(hideInfo && actorVisible)
+                if(hideInfo)
                 {
                     int tribeId = actorCopy.getTribeId();
                     if(actorCopy instanceof City)
@@ -621,7 +621,7 @@ public class Board {
         LinkedList<Vector2d> tiles = new LinkedList<>();
         City targetCity = (City) gameActors.get(cityID);
         Vector2d targetCityPos = targetCity.getPosition();
-        int radius = 0;
+        int radius;
 
         if(targetCity.getLevel() < 4){ radius = 1; } else{ radius = 2; }
 

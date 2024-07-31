@@ -424,10 +424,6 @@ public class City extends Actor{
         return unitsID.size();
     }
 
-    public void setTribeId(int tribeId) {
-        this.tribeId = tribeId;
-    }
-
     public LinkedList<Building> getBuildings() {
         return buildings;
     }

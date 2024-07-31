@@ -2,7 +2,6 @@ package utils.graph;
 
 import utils.Vector2d;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.PriorityQueue;
@@ -14,13 +13,17 @@ public class Pathfinder
 {
     public PathNode root;
     private NeighbourHelper provider;
-
-    public HashSet<PathNode> nodes;
+    private ArrayList<PathNode> destinationsFromStart;
+    private PriorityQueue<PathNode> openList;
+    private HashSet<PathNode> visited;
 
     public Pathfinder(Vector2d rootPos, NeighbourHelper provider)
     {
-        root = new PathNode(rootPos);
+        root = new PathNode(rootPos, 0.0);
         this.provider = provider;
+        destinationsFromStart = new ArrayList<>();
+        openList = new PriorityQueue<>();
+        visited = new HashSet<>();
     }
 
 
@@ -52,11 +55,9 @@ public class Pathfinder
 
     private ArrayList<PathNode> _dijkstra()
     {
-        root.setTotalCost(0.0);
-
-        ArrayList<PathNode> destinationsFromStart = new ArrayList<>();
-        PriorityQueue<PathNode> openList = new PriorityQueue<>();
-        HashSet<PathNode> visited = new HashSet<>();
+        destinationsFromStart.clear();
+        openList.clear();
+        visited.clear();
 
         openList.add(root);
         while (!openList.isEmpty())

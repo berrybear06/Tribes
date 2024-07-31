@@ -107,9 +107,7 @@ public abstract class Unit extends Actor
             case MIND_BENDER:
             case CATAPULT:
             case DEFENDER:
-                if(transition == MOVED && status == FRESH) { return true; }
-                if(transition == ATTACKED && status == FRESH) { return true; }
-                return false;
+                return status == FRESH && (transition == MOVED || transition == ATTACKED);
             //Rules for Dash
             case ARCHER:
             case BATTLESHIP:
@@ -119,9 +117,7 @@ public abstract class Unit extends Actor
             case SWORDMAN:
             case SUPERUNIT:
                 if(transition == MOVED && status == FRESH) { return true; }
-                if(transition == ATTACKED && status == FRESH) { return true; }
-                if(transition == ATTACKED && status == MOVED) { return true; }
-                return false;
+                return transition == ATTACKED && (status == FRESH || status == MOVED);
             //Rules for Escape
             case RIDER:
                 if(transition == MOVED && status == FRESH) { return true; }
