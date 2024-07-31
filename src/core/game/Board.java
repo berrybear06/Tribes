@@ -577,15 +577,16 @@ public class Board {
     void assignCityTiles(City c, int radius){
         Vector2d cityPos = c.getPosition();
         Tribe t = getTribe(c.getTribeId());
-        List<Vector2d> tiles = cityPos.neighborhood(radius, 0, size);
-        tiles.add(new Vector2d(cityPos));
-        for(Vector2d tile : tiles)
-        {
-            if(tileCityId[tile.x][tile.y] == -1){
-                tileCityId[tile.x][tile.y] = c.getActorId();
-                t.addScore(TribesConfig.CITY_BORDER_POINTS); // Add score to tribe on border creation
-                c.addPointsWorth(TribesConfig.CITY_BORDER_POINTS);
-            }
+        assignCityTile(c, t, cityPos);
+        for (Vector2d tile: cityPos.neighborhood(radius, 0, size))
+            assignCityTile(c, t, tile);
+    }
+
+    private void assignCityTile(City c, Tribe t, Vector2d tile) {
+        if (tileCityId[tile.x][tile.y] == -1){
+            tileCityId[tile.x][tile.y] = c.getActorId();
+            t.addScore(TribesConfig.CITY_BORDER_POINTS); // Add score to tribe on border creation
+            c.addPointsWorth(TribesConfig.CITY_BORDER_POINTS);
         }
     }
 
