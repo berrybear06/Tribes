@@ -274,11 +274,6 @@ public class Vector2d
 
     private static Map<CacheKey, List<Vector2d>> neighborhoodCache = new HashMap<>();
 
-    public List<Vector2d> neighborhood(int radius, int min, int max) {
-        CacheKey key = new CacheKey(x, y, radius, min, max);
-        return neighborhoodCache.computeIfAbsent(key, k -> calculateNeighborhood(radius, min, max));
-    }
-
     /**
      * Returns a list a neighbouring vectors from target for a given radius. This vector's x,y is
      * excluded from the neighbours.
@@ -287,14 +282,18 @@ public class Vector2d
      * @param max the maximum value to keep it in bounds (exclusive).
      * @return A list of neighbors.
      */
-    private List<Vector2d> calculateNeighborhood(int radius, int min, int max) {
+    public List<Vector2d> neighborhood(int radius, int min, int max) {
+        return neighborhoodCache.computeIfAbsent(new CacheKey(x, y, radius, min, max), Vector2d::calculateNeighborhood);
+    }
+
+    private static List<Vector2d> calculateNeighborhood(CacheKey k) {
         List<Vector2d> vectors = new ArrayList<>();
 
-        for(int i = x - radius; i <= x + radius; i++) {
-            for(int j = y - radius; j <= y + radius; j++) {
+        for(int i = k.x - k.radius; i <= k.x + k.radius; i++) {
+            for(int j = k.y - k.radius; j <= k.y + k.radius; j++) {
 
                 //Not x,y and within established bounds
-                if((i != x || j != y) && (i >= min && j >= min && i < max && j < max))
+                if((i != k.x || j != k.y) && (i >= k.min && j >= k.min && i < k.max && j < k.max))
                 {
                     vectors.add(new Vector2d(i, j));
                 }
