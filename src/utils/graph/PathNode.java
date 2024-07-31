@@ -18,14 +18,14 @@ public class PathNode implements Comparable<PathNode>
     public PathNode(Vector2d position)
     {
         this.parent = null;
-        this.position = new Vector2d(position);
+        this.position = position;
         this.id = calcNodeId(position);
     }
 
     public PathNode(Vector2d position, double totalCost)
     {
         this.parent = null;
-        this.position = new Vector2d(position);
+        this.position = position;
         this.id = calcNodeId(position);
         this.totalCost = totalCost;
     }

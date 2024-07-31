@@ -30,7 +30,7 @@ public class ResourceGatheringFactory implements ActionFactory {
                 continue;
             ResourceGathering resourceAction = new ResourceGathering(cityId);
             resourceAction.setResource(r);
-            resourceAction.setTargetPos(new Vector2d(pos.x, pos.y));
+            resourceAction.setTargetPos(pos);
             if (resourceAction.isFeasible(gs)) {
                 resourceActions.add(resourceAction);
             }

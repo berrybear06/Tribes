@@ -191,7 +191,7 @@ public class GUI extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 endDrag = new Vector2d(e.getX(), e.getY());
                 if (startDrag != null && !(startDrag.equals(endDrag))) {
-                    panTranslate = new Vector2d(endDrag.x - startDrag.x, endDrag.y - startDrag.y);
+                    panTranslate = Vector2d.subtract(endDrag, startDrag);
                     if (panTranslate.dist(0, 0) >= GUI_MIN_PAN) {
                         boardView.updatePan(panTranslate);
                         infoView.resetHighlight();
@@ -502,7 +502,7 @@ public class GUI extends JFrame {
     public static Vector2d getActionPosition(GameState gs, Action a) {
         Vector2d pos = null;
         if (a.getActionType() == MOVE) {
-            pos = new Vector2d(((Move) a).getDestination().x, ((Move) a).getDestination().y);
+            pos = ((Move) a).getDestination();
         } else if (a.getActionType() == ATTACK) {
             Unit target = (Unit) gs.getActor(((Attack) a).getTargetId());
             pos = target.getPosition();

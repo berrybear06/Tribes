@@ -46,7 +46,7 @@ public class Pathfinder
 
     public ArrayList<PathNode> findPathTo(Vector2d goalPosition)
     {
-        return _findPath(new PathNode(goalPosition));
+        return _findPath(goalPosition);
     }
 
 
@@ -79,11 +79,11 @@ public class Pathfinder
         return destinationsFromStart;
     }
 
-    private ArrayList<PathNode> _findPath(PathNode goal)
+    private ArrayList<PathNode> _findPath(Vector2d goal)
     {
         ArrayList<PathNode> reachable = _dijkstra();
         for (PathNode n: reachable) {
-            if (n.getX() == goal.getX() && n.getY() == goal.getY()) {
+            if (n.getX() == goal.x && n.getY() == goal.y) {
                 return calculatePath(n);
             }
         }

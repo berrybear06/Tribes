@@ -19,7 +19,7 @@ public class ClearForestFactory implements ActionFactory {
         LinkedList<Vector2d> tiles = gs.getBoard().getCityTiles(city.getActorId());
         for(Vector2d tile: tiles){
             ClearForest action = new ClearForest(city.getActorId());
-            action.setTargetPos(new Vector2d(tile.x, tile.y));
+            action.setTargetPos(tile);
             if(action.isFeasible(gs))
             {
                 actions.add(action);

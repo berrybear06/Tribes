@@ -652,8 +652,7 @@ public class GameView extends JComponent {
     }
 
     void updatePan(Vector2d panTranslate) {
-        this.panTranslate = new Vector2d(this.panTranslate.x + panTranslate.x,
-                this.panTranslate.y + panTranslate.y);
+        this.panTranslate = Vector2d.add(this.panTranslate, panTranslate);
     }
 
     void zoom(double zoomFactor, int focusX, int focusY) {

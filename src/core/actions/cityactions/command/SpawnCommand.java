@@ -20,7 +20,7 @@ public class SpawnCommand implements ActionCommand {
             Types.UNIT unit_type = action.getUnitType();
             City city = (City) gs.getActor(cityId);
             Vector2d cityPos = city.getPosition();
-            Unit newUnit = Types.UNIT.createUnit(new Vector2d(cityPos.x, cityPos.y), 0, false, city.getActorId(), city.getTribeId(), unit_type);
+            Unit newUnit = Types.UNIT.createUnit(cityPos, 0, false, city.getActorId(), city.getTribeId(), unit_type);
             gs.getBoard().addUnit(city, newUnit);
             Tribe tribe = gs.getTribe(city.getTribeId());
             tribe.subtractStars(unit_type.getCost());

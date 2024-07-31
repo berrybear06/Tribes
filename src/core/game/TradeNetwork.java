@@ -128,9 +128,8 @@ class TradeNetwork
                         Vector2d portFrom = ports.get(i);
                         Vector2d portTo = ports.get(j);
 
-                        Vector2d originPortPos = new Vector2d(portFrom.x, portFrom.y);
-                        Pathfinder tp = new Pathfinder(originPortPos, new TradeWaterStep(navigable));
-                        ArrayList<PathNode> path = tp.findPathTo(new Vector2d(portTo.x, portTo.y));
+                        Pathfinder tp = new Pathfinder(portFrom, new TradeWaterStep(navigable));
+                        ArrayList<PathNode> path = tp.findPathTo(portTo);
 
                         if (path != null) //+1 because path includes destination
                         {

@@ -20,7 +20,7 @@ public class GrowForestFactory implements ActionFactory {
 
         for(Vector2d tile: tiles){
                 GrowForest action = new GrowForest(city.getActorId());
-                action.setTargetPos(new Vector2d(tile.x, tile.y));
+                action.setTargetPos(tile);
                 if(action.isFeasible(gs)) {
                     actions.add(action);
                 }
