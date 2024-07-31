@@ -2,7 +2,6 @@ package core.actions.unitactions;
 
 import core.Types;
 import core.actions.Action;
-import core.actions.cityactions.CityAction;
 import core.game.GameState;
 import core.actors.units.Unit;
 

@@ -1,7 +1,6 @@
 package players;
 
 import core.actions.Action;
-import core.actions.tribeactions.TribeAction;
 import core.game.GameState;
 import utils.ElapsedCpuTimer;
 

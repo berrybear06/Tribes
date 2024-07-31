@@ -66,7 +66,7 @@ public class Pathfinder
         openList.add(root);
         nodes.add(root);
 
-        while (openList.size() != 0)
+        while (!openList.isEmpty())
         {
             node = openList.poll();
             //nodes.add(node);
@@ -128,7 +128,7 @@ public class Pathfinder
         openList.add(root);
         nodes.add(root);
 
-        while(openList.size() != 0)
+        while(!openList.isEmpty())
         {
             node = openList.poll();
             //nodes.add(node);

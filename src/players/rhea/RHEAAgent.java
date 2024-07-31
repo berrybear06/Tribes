@@ -283,7 +283,7 @@ public class RHEAAgent extends Agent {
                         candidate = from.getActions().get(actIdx);
                         feasibleAction = checkActionFeasibility(candidate, crossState);
 
-                    }else feasibleAction = false;
+                    }
 
                    // System.out.println("second parent");
                 }//else System.out.println("first parent");

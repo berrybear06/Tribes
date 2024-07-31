@@ -55,7 +55,7 @@ public class Buckets {
     
     public static int getMapIdx(Double value, Integer minValue, Integer maxValue, Integer bucketSize) {
         //System.out.println("getMapIdx: " + value + " " + minValue + " "+ maxValue + " "+ bucketSize + " ");
-        Double roundedValue = (double) Math.round(value);
+        double roundedValue = (double) Math.round(value);
 
         // The buckets id are calculated for the interval excluding minValue and maxValue: [minValue + 1, maxValue - 1]
         // This id calculation would return a value between 1 and nBuckets
@@ -66,8 +66,8 @@ public class Buckets {
         }
 
         // We calculate the values for the interval that we will use to calculate the ids, which exclude minValue and maxValue
-        Integer minInterval = minValue + 1;
-        Integer maxInterval = maxValue - 1;
+        int minInterval = minValue + 1;
+        int maxInterval = maxValue - 1;
 
         // If the value is the maximum or higher, it is assigned the last bucket, after the interval buckets 
         if ((maxValue != null) && (Double.compare(roundedValue, maxValue) >= 0)) {
@@ -81,7 +81,7 @@ public class Buckets {
 
     public static int getMapNBuckets(Integer minValue, Integer maxValue, Integer bucketSize) {
         Integer minInterval = minValue + 1;
-        Integer maxInterval = maxValue - 1;
+        int maxInterval = maxValue - 1;
 
         return getIntervalBucketId((double) maxInterval, minInterval, bucketSize) + 2;
     }
@@ -105,11 +105,11 @@ public class Buckets {
         mapRangesInfo[lastId] = "[>="+maxValue+"]";
 
         // the rest of buckets values are obtained with the interval calculation∂
-        Integer maxInterval = maxValue - 1;
-        Integer intervalValue = minValue + 1;
+        int maxInterval = maxValue - 1;
+        int intervalValue = minValue + 1;
 
         for (int id = 1; id < lastId; id++) {
-            Integer lastValueRange = intervalValue + (bucketSize - 1);
+            int lastValueRange = intervalValue + (bucketSize - 1);
 
             if(lastValueRange > maxInterval) {
                 lastValueRange = maxInterval;

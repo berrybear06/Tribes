@@ -5,7 +5,6 @@
 
 package utils.mapelites;
 
-import core.Constants;
 import utils.stats.GameplayStats;
 
 import java.io.File;

@@ -6,7 +6,6 @@ import core.actors.Actor;
 import core.game.GameState;
 import utils.Pair;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import static core.Types.CITY_LEVEL_UP.*;

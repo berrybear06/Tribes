@@ -2,9 +2,7 @@ package core.actions.cityactions;
 
 import core.Types;
 import core.actions.Action;
-import core.actors.Tribe;
 import core.actors.Building;
-import core.game.Board;
 import core.game.GameState;
 import core.actors.City;
 

@@ -191,10 +191,8 @@ public class LinearRegression {
      *         <em>R</em><sup>2</sup>
      */
     public String toString() {
-        StringBuilder s = new StringBuilder();
-        s.append(String.format("%.2f n + %.2f", slope(), intercept()));
-        s.append("  (R^2 = " + String.format("%.3f", R2()) + ")");
-        return s.toString();
+        return String.format("%.2f n + %.2f", slope(), intercept()) +
+                "  (R^2 = " + String.format("%.3f", R2()) + ")";
     }
 
 }

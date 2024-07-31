@@ -69,7 +69,7 @@ public class LevelGenerator {
         this.landCoefficient = (0.5 + relief) / 9;
 
         //Initialize the level with deep water.
-        for(int i = 0; i < mapSize*mapSize; i++){ level[i] = "d: "; };
+        for(int i = 0; i < mapSize*mapSize; i++){ level[i] = "d: "; }
     }
 
     /**
@@ -164,7 +164,7 @@ public class LevelGenerator {
                 if ((int)cell.getValue() == max) {
                     if (randCell == 0) {
                         capitalCells.add((int)cell.getKey());
-                        if(LEVELGEN_VERBOSE) System.out.println("Adding a capital for tribe " + tribe + " at tile " + (int)cell.getKey() + " with a max distance of " + cell.getValue());
+                        if(LEVELGEN_VERBOSE) System.out.println("Adding a capital for tribe " + tribe + " at tile " + cell.getKey() + " with a max distance of " + cell.getValue());
                     }
                     randCell--;
                 }
@@ -189,7 +189,7 @@ public class LevelGenerator {
         // We will start from capital tiles and evenly expand until the whole map is covered
         while (doneTiles.size() != mapSize*mapSize) {
             for (i = 0; i < tribes.length; i++) {
-                if (activeTiles.get(i).size() != 0) {
+                if (!activeTiles.get(i).isEmpty()) {
                     int randNumber = randomInt(0, activeTiles.get(i).size());
                     int randCell = activeTiles.get(i).get(randNumber);
 
@@ -202,14 +202,14 @@ public class LevelGenerator {
                         }
                     }
                     // If there are no land tiles around, accept water tiles
-                    if (validNeighbours.size() == 0) {
+                    if (validNeighbours.isEmpty()) {
                         for(int n : neighbours){
                             if(!doneTiles.contains(n)){
                                 validNeighbours.add(n);
                             }
                         }
                     }
-                    if (validNeighbours.size() != 0) {
+                    if (!validNeighbours.isEmpty()) {
                         int new_rand_number = randomInt(0, validNeighbours.size());
                         int new_rand_cell = validNeighbours.get(new_rand_number);
                         tileOwner[new_rand_cell] = tribes[i];
@@ -395,7 +395,7 @@ public class LevelGenerator {
         int resources = 0;
         for (int neighbour : circle(capital, 1)) {
             String resourceStr = getResource(neighbour);
-            if(resourceStr.length() > 0 && resourceStr.charAt(0) == resource){
+            if(!resourceStr.isEmpty() && resourceStr.charAt(0) == resource){
                 resources++;
             }
         }
@@ -440,7 +440,7 @@ public class LevelGenerator {
         if(tribe == null) {
             return 1.0;
         } else {
-            return data.getJSONObject(name.toString()).getDouble(tribe.toString());
+            return data.getJSONObject(name).getDouble(tribe.toString());
         }
     }
 
@@ -450,7 +450,7 @@ public class LevelGenerator {
      * @return the base probability.
      */
     public double getBaseProb(String name) {
-        return data.getJSONObject(name.toString()).getDouble("BASE");
+        return data.getJSONObject(name).getDouble("BASE");
     }
 
     /**
@@ -463,9 +463,9 @@ public class LevelGenerator {
         if(terrain == null) {
             level[index] = "" + getTerrain(index) + ':' + resource;
         }else if(resource == null) {
-            level[index] = "" + terrain + ':' + getResource(index);
+            level[index] = terrain + ':' + getResource(index);
         }else {
-            level[index] = "" + terrain + ':' + resource;
+            level[index] = terrain + ':' + resource;
         }
     }
 
@@ -652,7 +652,7 @@ public class LevelGenerator {
                 writer.append(',');
             }
         }
-        System.out.println(writer.toString());
+        System.out.println(writer);
     }
 
     /**

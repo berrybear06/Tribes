@@ -1,17 +1,10 @@
 package core.actions.cityactions;
 
-import core.TribesConfig;
 import core.Types;
 import core.actions.Action;
 import core.actors.City;
-import core.actors.Tribe;
-import core.actors.units.Unit;
-import core.game.Board;
 import core.game.GameState;
 import core.Types.CITY_LEVEL_UP;
-import utils.Vector2d;
-
-import java.util.LinkedList;
 
 
 public class LevelUp extends CityAction {

@@ -29,7 +29,7 @@ public class CityActionBuilder
         //Level Up
         allActions.addAll(new LevelUpFactory().computeActionVariants(city, gs));
 
-        if(allActions.size() > 0)
+        if(!allActions.isEmpty())
         {
             //Level up is special. Nothing else can be done here
             levelUpFlag = true;

@@ -7,9 +7,6 @@ import core.actors.Tribe;
 import core.game.Board;
 import core.game.GameState;
 import core.actors.City;
-import utils.Vector2d;
-
-import java.util.LinkedList;
 
 public class GrowForest extends CityAction
 {

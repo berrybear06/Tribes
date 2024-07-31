@@ -201,7 +201,7 @@ public class GameState {
             ArrayList<Action> actions = cab.getActions(this, c);
             levelingUp = cab.cityLevelsUp();
 
-            if(actions.size() > 0)
+            if(!actions.isEmpty())
             {
                 if(levelingUp)
                 {
@@ -238,7 +238,7 @@ public class GameState {
         {
             Unit u = (Unit) board.getActor(unitId);
             ArrayList<Action> actions = uab.getActions(this, u);
-            if(actions.size() > 0)
+            if(!actions.isEmpty())
                 unitActions.put(unitId, actions);
         }
 
@@ -394,7 +394,7 @@ public class GameState {
             if(unit.getStatus() == Types.TURN_STATUS.FRESH)
             {
                 LinkedList<Action> recoverActions = new RecoverFactory().computeActionVariants(unit, this);
-                if(recoverActions.size() > 0)
+                if(!recoverActions.isEmpty())
                 {
                     Recover recoverAction = (Recover)recoverActions.get(0);
                     ActionCommand ac = recoverAction.getActionType().getCommand();

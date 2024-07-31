@@ -36,7 +36,7 @@ public class RandomPortfolio extends Portfolio
             ArrayList<Unit> units = state.getUnits(state.getActiveTribeID());
             for(Unit u : units)
             {
-                if(state.getUnitActions(u) != null && state.getUnitActions(u).size() > 0)
+                if(state.getUnitActions(u) != null && !state.getUnitActions(u).isEmpty())
                 {
                     ActionAssignment aas = new ActionAssignment(u, s);
                     list.add(aas);
@@ -46,13 +46,13 @@ public class RandomPortfolio extends Portfolio
             ArrayList<City> cities = state.getCities(state.getActiveTribeID());
             for(City c : cities)
             {
-                if(state.getCityActions(c) != null && state.getCityActions(c).size() > 0) {
+                if(state.getCityActions(c) != null && !state.getCityActions(c).isEmpty()) {
                     ActionAssignment aas = new ActionAssignment(c, s);
                     list.add(aas);
                 }
             }
 
-            if(state.getTribeActions() != null && state.getTribeActions().size() > 0)
+            if(state.getTribeActions() != null && !state.getTribeActions().isEmpty())
                 list.add (new ActionAssignment(state.getActiveTribe(), s));
         }
 

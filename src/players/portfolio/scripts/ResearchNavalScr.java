@@ -2,7 +2,6 @@ package players.portfolio.scripts;
 
 import core.Types;
 import core.actions.Action;
-import core.actions.unitactions.MakeVeteran;
 import core.actors.Actor;
 import core.game.GameState;
 import players.portfolio.scripts.utils.MilitaryFunc;

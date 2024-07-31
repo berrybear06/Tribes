@@ -2,10 +2,7 @@ package players;
 
 import core.Types;
 import core.actions.Action;
-import core.actions.cityactions.Destroy;
-import core.actions.unitactions.Disband;
 import core.game.GameState;
-import players.mc.MonteCarloAgent;
 import utils.ElapsedCpuTimer;
 
 import java.util.ArrayList;
@@ -96,19 +93,19 @@ public abstract class Agent {
         for(Action act : cityActions)
             if(!(act.getActionType() == Types.ACTION.DESTROY))
                 cityGoodActions.add(act);
-        if(cityGoodActions.size() > 0) availableTypes.add(ACTION_TYPE.CITY);
+        if(!cityGoodActions.isEmpty()) availableTypes.add(ACTION_TYPE.CITY);
 
         ArrayList<Action> unitActions = gs.getAllUnitActions();
         ArrayList<Action> unitGoodActions = new ArrayList<>();
         for(Action act : unitActions)
             if(!(act.getActionType() == Types.ACTION.DISBAND))
                 unitGoodActions.add(act);
-        if(unitActions.size() > 0) availableTypes.add(ACTION_TYPE.UNIT);
+        if(!unitActions.isEmpty()) availableTypes.add(ACTION_TYPE.UNIT);
 
         ArrayList<Action> tribeActions = gs.getTribeActions();
         if(tribeActions.size() > 1) availableTypes.add(ACTION_TYPE.TRIBE); //>1, we need to have something else than EndTurn only.
 
-        if(availableTypes.size() == 0)
+        if(availableTypes.isEmpty())
         {
             return null;
         }
@@ -121,7 +118,7 @@ public abstract class Agent {
         }
         if(rootAction == ACTION_TYPE.UNIT)
         {
-            return unitActions;
+            return unitGoodActions;
         }
 
         return tribeActions;

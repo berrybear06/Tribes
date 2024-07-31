@@ -5,7 +5,6 @@ import core.game.TribeResult;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import players.Agent;
-import players.heuristics.PruneHeuristic;
 import players.heuristics.PrunePortfolioHeuristic;
 import players.portfolioMCTS.PortfolioMCTSPlayer;
 import utils.file.IO;
@@ -112,7 +111,7 @@ public class RunElites {
                         Files.createDirectory(mapPath);
                 }catch (Exception e)
                 {
-                    System.out.println("Couldn't create path " + mapPath.toString());
+                    System.out.println("Couldn't create path " + mapPath);
                 }
 
                 int nPlayers = playersArray.length();

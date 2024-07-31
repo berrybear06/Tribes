@@ -3,7 +3,6 @@ package core;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 import static core.Types.TECHNOLOGY.*;
@@ -141,7 +140,7 @@ public class TechnologyTree {
                available.add(tech);
        }
 
-       if(available.size() == 0)
+       if(available.isEmpty())
            return false;
 
        Types.TECHNOLOGY t = available.get(rnd.nextInt(available.size()));

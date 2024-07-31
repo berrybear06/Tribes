@@ -3,9 +3,6 @@ package core.actions.unitactions;
 import core.TechnologyTree;
 import core.Types;
 import core.actions.Action;
-import core.actors.City;
-import core.actors.Tribe;
-import core.game.Board;
 import core.game.GameState;
 import core.actors.units.Unit;
 

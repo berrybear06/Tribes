@@ -8,8 +8,6 @@ import core.actors.Tribe;
 import core.game.GameState;
 import utils.Vector2d;
 
-import java.util.Vector;
-
 public class BuildRoadCommand implements ActionCommand {
 
     @Override

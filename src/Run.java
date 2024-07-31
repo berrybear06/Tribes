@@ -24,7 +24,6 @@ import players.rhea.RHEAParams;
 
 import static core.Constants.*;
 import static core.Types.TRIBE.*;
-import static core.Types.TRIBE.OUMAJI;
 
 class Run {
 
@@ -89,41 +88,39 @@ class Run {
 
     static Run.PlayerType parsePlayerTypeStr(String arg) throws Exception
     {
-        switch(arg)
-        {
-            case "Human": return Run.PlayerType.HUMAN;
-            case "Do Nothing": return Run.PlayerType.DONOTHING;
-            case "Random": return Run.PlayerType.RANDOM;
-            case "Rule Based": return Run.PlayerType.SIMPLE;
-            case "OSLA": return Run.PlayerType.OSLA;
-            case "MC": return Run.PlayerType.MC;
-            case "MCTS": return Run.PlayerType.MCTS;
-            case "RHEA": return Run.PlayerType.RHEA;
-            case "OEP": return Run.PlayerType.OEP;
-            case "pMCTS": return Run.PlayerType.PORTFOLIO_MCTS;
-            case "EMCTS": return Run.PlayerType.EMCTS;
-        }
-        throw new Exception("Error: unrecognized Player Type: " + arg);
+        return switch (arg) {
+            case "Human" -> PlayerType.HUMAN;
+            case "Do Nothing" -> PlayerType.DONOTHING;
+            case "Random" -> PlayerType.RANDOM;
+            case "Rule Based" -> PlayerType.SIMPLE;
+            case "OSLA" -> PlayerType.OSLA;
+            case "MC" -> PlayerType.MC;
+            case "MCTS" -> PlayerType.MCTS;
+            case "RHEA" -> PlayerType.RHEA;
+            case "OEP" -> PlayerType.OEP;
+            case "pMCTS" -> PlayerType.PORTFOLIO_MCTS;
+            case "EMCTS" -> PlayerType.EMCTS;
+            default -> throw new Exception("Error: unrecognized Player Type: " + arg);
+        };
     }
 
     static Types.TRIBE parseTribeStr(String arg) throws Exception
     {
-        switch(arg)
-        {
-            case "Xin Xi": return XIN_XI;
-            case "Imperius": return IMPERIUS;
-            case "Bardur": return BARDUR;
-            case "Oumaji": return OUMAJI;
-            case "Kickoo": return KICKOO;
-            case "Hoodrick": return HOODRICK;
-            case "Luxidoor": return LUXIDOOR;
-            case "Vengir": return VENGIR;
-            case "Zebasi": return ZEBASI;
-            case "Ai-Mo": return AI_MO;
-            case "Quetzali": return QUETZALI;
-            case "Yadakk": return YADAKK;
-        }
-        throw new Exception("Error: unrecognized Tribe: " + arg);
+        return switch (arg) {
+            case "Xin Xi" -> XIN_XI;
+            case "Imperius" -> IMPERIUS;
+            case "Bardur" -> BARDUR;
+            case "Oumaji" -> OUMAJI;
+            case "Kickoo" -> KICKOO;
+            case "Hoodrick" -> HOODRICK;
+            case "Luxidoor" -> LUXIDOOR;
+            case "Vengir" -> VENGIR;
+            case "Zebasi" -> ZEBASI;
+            case "Ai-Mo" -> AI_MO;
+            case "Quetzali" -> QUETZALI;
+            case "Yadakk" -> YADAKK;
+            default -> throw new Exception("Error: unrecognized Tribe: " + arg);
+        };
     }
 
     public static double[] getWeights(JSONArray w) {

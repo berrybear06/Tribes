@@ -1,15 +1,11 @@
 package core.actions.cityactions;
 
-import core.TribesConfig;
 import core.Types;
 import core.actions.Action;
 import core.actors.Tribe;
 import core.game.Board;
 import core.game.GameState;
 import core.actors.City;
-import utils.Vector2d;
-
-import java.util.LinkedList;
 
 public class ResourceGathering extends CityAction
 {

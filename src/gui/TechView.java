@@ -71,30 +71,30 @@ public class TechView extends JComponent {
             Types.TECHNOLOGY t = node.tech;
 
             // Info of each research
-            String effect = "<h1>" + t.toString() + "</h1>";
+            StringBuilder effect = new StringBuilder("<h1>" + t.toString() + "</h1>");
             for (Types.BUILDING b: Types.BUILDING.values()) {
                 if (b.getTechnologyRequirement() == t) {
-                    effect += "<br/>Enables building " + b.toString() + ".";
+                    effect.append("<br/>Enables building ").append(b).append(".");
                 }
             }
             for (Types.UNIT u: Types.UNIT.values()) {
                 if (u.getTechnologyRequirement() == t && u.spawnable()) {
-                    effect += "<br/>Enables spawning " + u.toString() + ".";
+                    effect.append("<br/>Enables spawning ").append(u).append(".");
                 }
             }
             for (Types.RESOURCE r : Types.RESOURCE.values()) {
                 if (r.getTechnologyRequirement() == t) {
-                    effect += "<br/>Enables gathering " + r.toString() + ".";
+                    effect.append("<br/>Enables gathering ").append(r).append(".");
                 }
 
             }
             for (Types.ACTION a : Types.ACTION.values()) {
                 if (a.getTechnologyRequirement() == t) {
-                    effect += "<br/>Enables action " + a.toString() + ".";
+                    effect.append("<br/>Enables action ").append(a).append(".");
                 }
             }
 //            techEffects[i] = effect;
-            String ef = effect;
+            String ef = effect.toString();
 
             JButton button = new JButton(t.name());
             button.setBackground(Color.DARK_GRAY);

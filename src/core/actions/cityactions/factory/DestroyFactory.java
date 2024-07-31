@@ -1,12 +1,10 @@
 package core.actions.cityactions.factory;
 
-import core.Types;
 import core.actions.Action;
 import core.actions.ActionFactory;
 import core.actions.cityactions.Destroy;
 import core.actors.Actor;
 import core.actors.City;
-import core.game.Board;
 import core.game.GameState;
 import utils.Vector2d;
 

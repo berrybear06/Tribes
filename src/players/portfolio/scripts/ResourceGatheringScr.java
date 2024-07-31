@@ -2,7 +2,6 @@ package players.portfolio.scripts;
 
 import core.Types;
 import core.actions.Action;
-import core.actions.cityactions.LevelUp;
 import core.actions.cityactions.ResourceGathering;
 import core.actors.Actor;
 import core.game.GameState;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static core.Types.BUILDING.*;
-import static core.Types.BUILDING.MOUNTAIN_TEMPLE;
 import static core.Types.RESOURCE.*;
 
 public class ResourceGatheringScr extends BaseScript {

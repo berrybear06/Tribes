@@ -8,7 +8,6 @@ import core.actions.cityactions.Spawn;
 import core.actions.tribeactions.ResearchTech;
 import core.actors.Building;
 import core.actors.City;
-import core.actors.Tribe;
 import core.actors.units.Unit;
 import core.game.GameState;
 import core.game.TribeResult;

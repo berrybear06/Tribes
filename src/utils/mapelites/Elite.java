@@ -6,15 +6,11 @@
 package utils.mapelites;
 
 
-import core.game.TribeResult;
 import utils.Pair;
 import utils.file.IO;
 import utils.stats.GameplayStats;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.TreeMap;
@@ -107,12 +103,12 @@ public class Elite {
     }
 
     private String weightsString(String separator) {
-        String weights = "";
+        StringBuilder weights = new StringBuilder();
         for (int i = 0; i < (genome.length - 1); i++) {
-            weights += genome[i] + separator;
+            weights.append(genome[i]).append(separator);
         }
-        weights += genome[genome.length - 1];
-        return weights;
+        weights.append(genome[genome.length - 1]);
+        return weights.toString();
     }
 
     private String[] featuresString(String separator) {
@@ -164,17 +160,17 @@ public class Elite {
 
         if(num > 0)
         {
-            String filename = path.toString() + "/" + header + num  + ".txt";
+            String filename = path + "/" + header + num  + ".txt";
             EliteRecord eliteInFile = new EliteRecord();
             eliteInFile.readFromFile(filename);
             if(eliteInFile.compareTo(this) > 0)
             {
-                saveFilename = path.toString()  + "/" + header + (num+1)  + ".txt";
+                saveFilename = path + "/" + header + (num+1)  + ".txt";
                 save = true;
             }
         }else if(num == 0)
         {
-            saveFilename = path.toString() + "/" + header + 1 + ".txt";
+            saveFilename = path + "/" + header + 1 + ".txt";
             save = true;
         }
 

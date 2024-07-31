@@ -208,11 +208,11 @@ public class InfoView extends JComponent {
                         s += t.toString();
                         if (r != null) {
                             // Resource next
-                            s += ", " + r.toString();
+                            s += ", " + r;
                         }
                         if (b != null) {
                             // Buildings
-                            s += ", " + b.toString();
+                            s += ", " + b;
                         }
                     }
                 } else {
@@ -222,7 +222,7 @@ public class InfoView extends JComponent {
                         s += r.toString();
                         if (b != null) {
                             // Buildings
-                            s += ", " + b.toString();
+                            s += ", " + b;
                         }
                     } else if (b != null) {
                         // Buildings
@@ -256,7 +256,7 @@ public class InfoView extends JComponent {
             sb.append("<b>Veteran unit.</b>");
         } else {
             int kills = Math.min(u.getKills(), VETERAN_KILLS);
-            sb.append("" + kills + "/" + VETERAN_KILLS + " kills to become a veteran.");
+            sb.append(kills + "/" + VETERAN_KILLS + " kills to become a veteran.");
         }
 //        sb.append("</td></tr></table>");
         sb.append("<ul>");
@@ -327,7 +327,7 @@ public class InfoView extends JComponent {
                 boolean foundD = false;
                 boolean[] foundS = new boolean[actionS.length];
                 boolean[] foundB = new boolean[actionB.length];
-                if (acts != null && acts.size() > 0) {
+                if (acts != null && !acts.isEmpty()) {
                     for (Action a : acts) {
                         if (a != null && ((CityAction) a).getTargetPos() != null &&
                                 ((CityAction) a).getTargetPos().equals(position)) {
@@ -380,7 +380,7 @@ public class InfoView extends JComponent {
 
         if (u != null) {
             ArrayList<Action> unitActions = gs.getUnitActions(u);
-            if (unitActions != null && unitActions.size() > 0) {
+            if (unitActions != null && !unitActions.isEmpty()) {
                 boolean foundHO = false;
                 boolean foundD = false;
                 boolean foundU = false;

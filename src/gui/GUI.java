@@ -151,7 +151,7 @@ public class GUI extends JFrame {
                 //Only provide information if clicking on a visible tile
                 Vector2d translate = boardView.getPanTranslate();
                 Vector2d ep = new Vector2d(e.getX() - translate.x, e.getY() - translate.y);
-                Vector2d p = GameView.rotatePointReverse((int)ep.x, (int)ep.y);
+                Vector2d p = GameView.rotatePointReverse(ep.x, ep.y);
 
                 // If unit highlighted and action at new click valid for unit, execute action
                 if (game.getPlayers()[gs.getActiveTribeID()] instanceof HumanAgent ||
@@ -162,7 +162,7 @@ public class GUI extends JFrame {
                         int n = 0;
                         if (candidate.getActionType() == DISBAND) {  // These actions needs confirmation before executing
                             n = JOptionPane.showConfirmDialog(mainPanel,
-                                    "Confirm action " + candidate.toString(),
+                                    "Confirm action " + candidate,
                                     "Are you sure?",
                                     JOptionPane.YES_NO_OPTION,
                                     JOptionPane.QUESTION_MESSAGE);
@@ -191,7 +191,7 @@ public class GUI extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 endDrag = new Vector2d(e.getX(), e.getY());
                 if (startDrag != null && !(startDrag.equals(endDrag))) {
-                    panTranslate = new Vector2d(+ endDrag.x - startDrag.x, + endDrag.y - startDrag.y);
+                    panTranslate = new Vector2d(endDrag.x - startDrag.x, endDrag.y - startDrag.y);
                     if (panTranslate.dist(0, 0) >= GUI_MIN_PAN) {
                         boardView.updatePan(panTranslate);
                         infoView.resetHighlight();

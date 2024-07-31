@@ -99,7 +99,7 @@ public class BuildingFunc {
             }
         }
 
-        if(candidate_actions.size() > 0)
+        if(!candidate_actions.isEmpty())
         {
             int nActions = candidate_actions.size();
             return new Pair<>(candidate_actions.get(rnd.nextInt(nActions)), highestNeigh);

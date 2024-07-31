@@ -129,7 +129,7 @@ public class EMCTSAgent extends Agent {
 
         EMCTSTreeNode toMutate = null;
 
-        if (children.size() == 0) {
+        if (children.isEmpty()) {
             toMutate = root;
         } else {
             boolean found = false;
@@ -137,7 +137,7 @@ public class EMCTSAgent extends Agent {
             EMCTSTreeNode nodeOn = root;
             nodeScore = nodeOn.getScore();
             while (!found) {
-                if (nodeOn.getChildren().size() == 0) {
+                if (nodeOn.getChildren().isEmpty()) {
                     found = true;
                     toMutate = nodeOn;
                 } else {
@@ -175,7 +175,7 @@ public class EMCTSAgent extends Agent {
         }
         if(individual.size() == (params.NODE_SIZE-1) && (individual.get((params.NODE_SIZE-2)).getActionType() != Types.ACTION.END_TURN)){
             ArrayList<Action> allAvailableActions = this.allGoodActions(gs, m_rnd);
-            Action end = null; ;
+            Action end = null;
             for(Action a : allAvailableActions){
                 if(a.getActionType() == Types.ACTION.END_TURN){
                     end = a;
@@ -250,7 +250,7 @@ public class EMCTSAgent extends Agent {
         }
         if (!(repairedChild.get(repairedChild.size() - 1).getActionType() == Types.ACTION.END_TURN)) {
             ArrayList<Action> allAvailableActions = this.allGoodActions(gs, m_rnd);
-            Action end = null; ;
+            Action end = null;
             for(Action a : allAvailableActions){
                 if(a.getActionType() == Types.ACTION.END_TURN){
                     end = a;

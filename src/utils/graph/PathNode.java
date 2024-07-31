@@ -2,8 +2,6 @@ package utils.graph;
 
 import utils.Vector2d;
 
-import java.util.Objects;
-
 public class PathNode implements Comparable<PathNode>
 {
     private int id;

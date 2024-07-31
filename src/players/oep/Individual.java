@@ -40,7 +40,7 @@ public class Individual implements Comparable<Individual>{
     }
 
     public Action returnNext(){
-        if(actions.size() == 0){return null;}
+        if(actions.isEmpty()){return null;}
         Action action = actions.get(0);
         actions.remove(0);
         return action;

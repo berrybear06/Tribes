@@ -149,8 +149,7 @@ public enum Feature {
     private LinearRegression getRegression(String key, GameplayStats gps)
     {
         int[] tilesPerTurn = gps.getStatsArray(key);
-        LinearRegression lr = new LinearRegression(tilesPerTurn);
-        return lr;
+        return new LinearRegression(tilesPerTurn);
     }
 
 

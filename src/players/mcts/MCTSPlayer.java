@@ -2,15 +2,12 @@ package players.mcts;
 
 import core.actions.Action;
 import core.actions.tribeactions.EndTurn;
-import core.game.Game;
 import core.game.GameState;
 import players.Agent;
 import utils.ElapsedCpuTimer;
 
 import java.util.ArrayList;
 import java.util.Random;
-
-import static core.Constants.TURN_TIME_MILLIS;
 
 public class MCTSPlayer extends Agent {
 

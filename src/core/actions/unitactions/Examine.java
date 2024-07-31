@@ -23,7 +23,7 @@ public class Examine extends UnitAction
         Unit unit = (Unit) gs.getActor(this.unitId);
         Vector2d unitPos = unit.getPosition();
         Tribe t = gs.getTribe(unit.getTribeId());
-        if(t.getCitiesID().size() == 0)
+        if(t.getCitiesID().isEmpty())
             return false;
 
         return unit.isFresh() && gs.getBoard().getResourceAt(unitPos.x, unitPos.y) == Types.RESOURCE.RUINS;

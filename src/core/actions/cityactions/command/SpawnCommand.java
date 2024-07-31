@@ -3,12 +3,10 @@ package core.actions.cityactions.command;
 import core.Types;
 import core.actions.Action;
 import core.actions.ActionCommand;
-import core.actions.cityactions.ResourceGathering;
 import core.actions.cityactions.Spawn;
 import core.actors.City;
 import core.actors.Tribe;
 import core.actors.units.Unit;
-import core.game.Board;
 import core.game.GameState;
 import utils.Vector2d;
 

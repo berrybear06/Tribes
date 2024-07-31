@@ -1,6 +1,5 @@
 package core.game;
 
-import core.Constants;
 import core.TechnologyTree;
 import core.Diplomacy;
 import core.TribesConfig;
@@ -12,7 +11,6 @@ import core.actors.units.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import utils.Vector2d;
-import utils.graph.*;
 
 import java.util.*;
 
@@ -719,15 +717,15 @@ public class Board {
         cities.remove((Integer)tribe.getCapitalID());
 
         // Move the unit from one city to village. Rank: capital -> cities -> None
-        if(ownsCapital && capital.getUnitsID().size() > 0){
+        if(ownsCapital && !capital.getUnitsID().isEmpty()){
             moveLastUnitFromCity(capital, destCity);
         }else{
             boolean moved = false;
             //Capital is empty or not owned. Check the other cities at random
             Collections.shuffle(cities, rnd);
-            while (!moved && cities.size() > 0){
+            while (!moved && !cities.isEmpty()){
                 City originalCity = (City)getActor(cities.removeFirst());
-                if (originalCity.getUnitsID().size() > 0){
+                if (!originalCity.getUnitsID().isEmpty()){
                     moveLastUnitFromCity(originalCity, destCity);
                     moved = true;
                 }
@@ -759,7 +757,7 @@ public class Board {
             LinkedList<Integer> cities = new LinkedList<>(tribe.getCitiesID());
             cities.remove((Integer)tribe.getCapitalID());
             Collections.shuffle(cities, rnd);
-            while (cities.size() > 0 && fromCity.getNumUnits() > 0){
+            while (!cities.isEmpty() && fromCity.getNumUnits() > 0){
                 City destCity = (City)getActor(cities.removeFirst());
                 while (destCity.canAddUnit() && fromCity.getNumUnits() > 0){
                     moveLastUnitFromCity(fromCity, destCity);
@@ -957,7 +955,7 @@ public class Board {
      * Returns true if tribeId can build a road in (x,y)
      * It does not check for tribe stars or technology, *only* for board features (territory, terrain and visibility)
      * @param tribeId id of the tribe that could build roads
-     * @return the list of positions where a road could be build
+     * @return whether tribeID can build a road at (x,y)
      */
     public boolean canBuildRoadAt(int tribeId, int x, int y)
     {

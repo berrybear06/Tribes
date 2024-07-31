@@ -1,14 +1,10 @@
 package core.actions.cityactions;
 
-import core.TribesConfig;
 import core.Types;
 import core.actions.Action;
 import core.actors.City;
 import core.game.Board;
 import core.game.GameState;
-import utils.Vector2d;
-
-import java.util.LinkedList;
 
 public class ClearForest extends CityAction
 {

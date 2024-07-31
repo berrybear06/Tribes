@@ -7,7 +7,6 @@ import players.portfolio.Portfolio;
 import players.portfolio.scripts.BaseScript;
 import players.portfolioMCTS.PortfolioTreeNode;
 
-import java.awt.image.AreaAveragingScaleFilter;
 import java.util.*;
 import static core.Types.ACTION.*;
 

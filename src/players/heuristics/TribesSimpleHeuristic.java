@@ -1,6 +1,5 @@
 package players.heuristics;
 
-import core.TechnologyTree;
 import core.actors.City;
 import core.actors.units.Unit;
 import core.game.GameState;

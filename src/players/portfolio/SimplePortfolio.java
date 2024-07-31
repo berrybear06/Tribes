@@ -2,7 +2,6 @@ package players.portfolio;
 
 import core.Types;
 import core.actions.Action;
-import core.actions.cityactions.Build;
 import core.actors.Actor;
 import core.actors.City;
 import core.actors.units.Unit;
@@ -12,9 +11,6 @@ import players.portfolio.scripts.*;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.TreeMap;
-import java.util.logging.Level;
-
-import static core.Types.BUILDING.PORT;
 
 public class SimplePortfolio extends Portfolio
 {
@@ -138,14 +134,14 @@ public class SimplePortfolio extends Portfolio
         for(Unit u : state.getUnits(state.getActiveTribeID()))
         {
             ArrayList<Action> unitActions = state.getUnitActions(u);
-            if(unitActions != null && unitActions.size() > 0)
+            if(unitActions != null && !unitActions.isEmpty())
                 extract(state, list, unitActions, u);
         }
 
         for(City c : state.getCities(state.getActiveTribeID()))
         {
             ArrayList<Action> cityActions = state.getCityActions(c);
-            if(cityActions != null && cityActions.size() > 0)
+            if(cityActions != null && !cityActions.isEmpty())
                 extract(state, list, cityActions, c);
         }
 
@@ -170,7 +166,7 @@ public class SimplePortfolio extends Portfolio
                         scriptActions.add(act);
                 }
 
-                if(scriptActions.size() > 0) {
+                if(!scriptActions.isEmpty()) {
                     // ... so the script can have access to them
                     s.setActions(scriptActions);
 

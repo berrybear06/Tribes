@@ -4,10 +4,8 @@ import core.Constants;
 import core.TechnologyTree;
 import core.TribesConfig;
 import core.Types;
-import core.actions.tribeactions.ResearchTech;
 import core.actors.units.Unit;
 import core.game.Board;
-import core.game.Game;
 import core.game.GameState;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -111,7 +109,7 @@ public class Tribe extends Actor {
             }
         }
         stars = obj.getInt("star");
-        monuments = Types.BUILDING.initMonuments(obj.getJSONObject("monuments"));
+        monuments = initMonuments(obj.getJSONObject("monuments"));
         nPacifistCount = obj.getInt("nPacifistCount");
         techTree = new TechnologyTree(obj.getJSONObject("technology"));
         connectedCities = new ArrayList<>();
@@ -144,7 +142,7 @@ public class Tribe extends Actor {
         tribesMet = new ArrayList<>();
         extraUnits = new ArrayList<>();
         connectedCities = new ArrayList<>();
-        monuments = Types.BUILDING.initMonuments();
+        monuments = initMonuments();
         nKills = 0;
         nPacifistCount = 0;
     }
@@ -428,7 +426,7 @@ public class Tribe extends Actor {
                 }
             }
 
-            if (potentialTechForThisTribe.size() == 0)
+            if (potentialTechForThisTribe.isEmpty())
                 return;
 
             Types.TECHNOLOGY techToGet = potentialTechForThisTribe.get(r.nextInt(potentialTechForThisTribe.size()));
@@ -460,7 +458,7 @@ public class Tribe extends Actor {
                     Vector2d nonCapitalPos = nonCapitalCity.getPosition();
                     ArrayList<PathNode> pathToCity = tp.findPathTo(nonCapitalPos);
 
-                    boolean connectedNow = (pathToCity != null) && (pathToCity.size() > 0);
+                    boolean connectedNow = (pathToCity != null) && (!pathToCity.isEmpty());
 
                     //This was previously connected
                     if (connectedCities.contains(cityId)) {
@@ -518,8 +516,7 @@ public class Tribe extends Actor {
     private void dropCityFromNetwork(City lostCity)
     {
         int cityId = lostCity.getActorId();
-        int cityIdx = connectedCities.indexOf(cityId);
-        connectedCities.remove(cityIdx);
+        connectedCities.remove((Integer) cityId);
 
         //this city loses 1 population
         lostCity.addPopulation(this, -1);

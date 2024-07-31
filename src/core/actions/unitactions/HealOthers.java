@@ -1,6 +1,5 @@
 package core.actions.unitactions;
 
-import core.TribesConfig;
 import core.Types;
 import core.actions.Action;
 import core.game.Board;

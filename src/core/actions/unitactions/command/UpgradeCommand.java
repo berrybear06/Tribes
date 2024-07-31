@@ -14,7 +14,6 @@ import core.game.Board;
 import core.game.GameState;
 
 import static core.Types.UNIT.*;
-import static core.Types.UNIT.SHIP;
 
 public class UpgradeCommand implements ActionCommand {
 

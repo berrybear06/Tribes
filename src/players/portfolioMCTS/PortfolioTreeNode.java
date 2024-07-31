@@ -242,7 +242,7 @@ public class PortfolioTreeNode
             //if(this.children.length == 0)
             System.out.println("Warning! couldn't find the best UCT value " + which + " : " + this.children.length + " " +
                     //throw new RuntimeException("Warning! couldn't find the best UCT value " + which + " : " + this.children.length + " " +
-                    + bounds[0] + " " + bounds[1]);
+                    bounds[0] + " " + bounds[1]);
             System.out.print(this.m_depth + ", AmIMoving? " + IamMoving + ";");
             for(int i = 0; i < this.children.length; ++i)
                 System.out.printf(" %f2", vals[i]);

@@ -48,6 +48,6 @@ public class ActionAssignment {
     public String toString()
     {
         return "Actor " + actor.getActorId() + ", Action " + action.toString()
-                + "; " + script.getClass().toString() + "; Value: " + value;
+                + "; " + script.getClass() + "; Value: " + value;
     }
 }

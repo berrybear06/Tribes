@@ -1,15 +1,11 @@
 package core.actions.cityactions.command;
 
-import core.TribesConfig;
 import core.Types;
-import core.Types.CITY_LEVEL_UP;
 import core.actions.Action;
 import core.actions.ActionCommand;
-import core.actions.cityactions.LevelUp;
 import core.actions.cityactions.ResourceGathering;
 import core.actors.City;
 import core.actors.Tribe;
-import core.actors.units.Unit;
 import core.game.Board;
 import core.game.GameState;
 import utils.Vector2d;

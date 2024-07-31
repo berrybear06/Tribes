@@ -3,8 +3,6 @@ package players.portfolio.scripts;
 import core.Types;
 import core.actions.Action;
 import core.actors.Actor;
-import core.actors.City;
-import core.game.Board;
 import core.game.GameState;
 import players.portfolio.scripts.utils.InterestPoint;
 import players.portfolio.scripts.utils.MilitaryFunc;

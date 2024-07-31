@@ -1,7 +1,6 @@
 package core.actions.tribeactions.factory;
 
 import core.actions.Action;
-import core.actions.tribeactions.DeclareWar;
 import core.actions.tribeactions.factory.BuildRoadFactory;
 import core.actions.tribeactions.factory.EndTurnFactory;
 import core.actions.tribeactions.factory.ResearchTechFactory;

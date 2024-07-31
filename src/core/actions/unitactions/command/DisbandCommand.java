@@ -1,9 +1,7 @@
 package core.actions.unitactions.command;
 
-import core.Types;
 import core.actions.Action;
 import core.actions.ActionCommand;
-import core.actions.unitactions.Convert;
 import core.actions.unitactions.Disband;
 import core.actors.City;
 import core.actors.Tribe;

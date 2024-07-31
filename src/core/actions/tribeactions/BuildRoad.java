@@ -1,7 +1,5 @@
 package core.actions.tribeactions;
-import core.TribesConfig;
 import core.actions.Action;
-import core.actions.unitactions.Move;
 import core.actors.Tribe;
 import core.game.GameState;
 import utils.Vector2d;

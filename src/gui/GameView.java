@@ -308,7 +308,7 @@ public class GameView extends JComponent {
                     int y = (int)(rotated.y - imgSize/1.5);
 
                     ArrayList<Action> possibleActions = gameState.getUnitActions(u);
-                    boolean exhausted = (possibleActions == null || possibleActions.size() == 0);
+                    boolean exhausted = (possibleActions == null || possibleActions.isEmpty());
 
                     Tribe t = gameState.getTribe(u.getTribeId());
                     int imageTribeId = t.getType().getKey();
@@ -347,7 +347,7 @@ public class GameView extends JComponent {
             Unit u = board.getUnitAt(highlightY, highlightX);
             if (u != null && !infoView.clickedTwice()) {
                 ArrayList<Action> possibleActions = gameState.getUnitActions(u);
-                if (possibleActions != null && possibleActions.size() > 0) {
+                if (possibleActions != null && !possibleActions.isEmpty()) {
                     for (Action a : possibleActions) {
                         if (!(a.getActionType() == Types.ACTION.EXAMINE || a.getActionType() == Types.ACTION.CAPTURE)) {
                             Image actionImg = Types.ACTION.getImage(a);
@@ -598,7 +598,7 @@ public class GameView extends JComponent {
                         }
                         int pw = Math.abs(progress) * sectionWidth;
                         Rectangle pgRect = new Rectangle(bgRect.x, bgRect.y, pw, bgRect.height);
-                        g.fillRoundRect(pgRect.x + panTranslate.x, pgRect.y + +panTranslate.y,
+                        g.fillRoundRect(pgRect.x + panTranslate.x, pgRect.y + panTranslate.y,
                                 pgRect.width, pgRect.height, ROUND_RECT_ARC, ROUND_RECT_ARC);
 
                         // Draw unit counts
@@ -936,7 +936,7 @@ public class GameView extends JComponent {
                     actionAnimationUnitsTribe.add(new Pair<>(source.getTribeId(), target.getTribeId()));
                     sourceTargetAnimationInfo.add(new Pair<>(sourceAnimationInfo, targetAnimationInfo));
                 }
-                if (targets.size() > 0) {
+                if (!targets.isEmpty()) {
                     this.animatedAction = a;
                 }
             }
@@ -944,7 +944,7 @@ public class GameView extends JComponent {
     }
 
     private void paintActionAnimations(Graphics2D g) {
-        if (sourceTargetAnimationInfo.size() > 0) {
+        if (!sourceTargetAnimationInfo.isEmpty()) {
             ArrayList<Integer> finished = new ArrayList<>();
             for (int i = 0; i < sourceTargetAnimationInfo.size(); i++) {
                 Pair<Image,Vector2d> source = sourceTargetAnimationInfo.get(i).getFirst();
@@ -1013,7 +1013,7 @@ public class GameView extends JComponent {
     }
 
     Action getAnimatedAction() {
-        if (sourceTargetAnimationInfo.size() == 0 && animatedAction != null) {
+        if (sourceTargetAnimationInfo.isEmpty() && animatedAction != null) {
             Action a = animatedAction.copy();
             animatedAction = null;
             return a;

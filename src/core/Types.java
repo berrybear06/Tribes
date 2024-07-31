@@ -729,7 +729,7 @@ public class Types {
         public int getKey() {  return key; }
         public char getMapChar() {return mapChar;}
         public Image getImage(String suffix) {
-            if (suffix == null || suffix.equals("")) {
+            if (suffix == null || suffix.isEmpty()) {
                 return ImageIO.GetInstance().getImage(imageFile);
             }
             String[] splitPath = imageFile.split("\\.");

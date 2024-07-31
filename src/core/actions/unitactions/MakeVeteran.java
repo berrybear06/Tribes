@@ -9,8 +9,6 @@ import core.game.GameState;
 import core.actors.units.Unit;
 import core.Types;
 
-import java.util.LinkedList;
-
 public class MakeVeteran extends UnitAction
 {
     public MakeVeteran(int unitId)

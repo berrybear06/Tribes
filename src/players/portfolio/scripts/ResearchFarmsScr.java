@@ -7,7 +7,6 @@ import core.game.GameState;
 import players.portfolio.scripts.utils.MilitaryFunc;
 import utils.Pair;
 
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Random;
 

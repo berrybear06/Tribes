@@ -5,15 +5,12 @@ import core.Types;
 import core.actions.Action;
 import core.actions.cityactions.*;
 import core.actions.tribeactions.BuildRoad;
-import core.actions.tribeactions.EndTurn;
 import core.actions.tribeactions.ResearchTech;
 import core.actions.tribeactions.SendStars;
 import core.actions.unitactions.*;
 import core.actors.Building;
 import core.actors.City;
 import core.actors.Tribe;
-import core.actors.units.Archer;
-import core.actors.units.Catapult;
 import core.actors.units.Unit;
 import core.game.Board;
 import core.game.GameState;
@@ -46,8 +43,7 @@ public class SimpleAgent extends Agent {
 
     @Override
     public Agent copy() {
-        SimpleAgent player = new SimpleAgent(seed);
-        return player;
+        return new SimpleAgent(seed);
     }
 
     @Override

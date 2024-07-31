@@ -2,22 +2,15 @@ package players.portfolio.scripts;
 
 import core.Types;
 import core.actions.Action;
-import core.actions.cityactions.GrowForest;
-import core.actions.unitactions.Move;
 import core.actors.Actor;
 import core.actors.City;
 import core.game.Board;
 import core.game.GameState;
-import players.portfolio.scripts.utils.BuildingFunc;
 import players.portfolio.scripts.utils.InterestPoint;
 import players.portfolio.scripts.utils.MilitaryFunc;
 import utils.Pair;
-import utils.Vector2d;
 
-import java.util.ArrayList;
 import java.util.Random;
-
-import static core.Types.BUILDING.LUMBER_HUT;
 
 public class MoveToCaptureScr extends BaseScript {
 

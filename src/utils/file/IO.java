@@ -35,11 +35,11 @@ public class IO
             in.close();
         }catch(Exception e)
         {
-            System.out.println("Error reading the file " + filename + ": " + e.toString());
+            System.out.println("Error reading the file " + filename + ": " + e);
             e.printStackTrace();
             return null;
         }
-        return lines.toArray(new String[lines.size()]);
+        return lines.toArray(new String[0]);
     }
 
 
@@ -52,7 +52,7 @@ public class IO
     public boolean writeFile(String filename, ArrayList<String> lines, boolean append)
     {
         try{
-            BufferedWriter writer = new BufferedWriter(new FileWriter(new File(filename), append));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename, append));
             for(String line : lines)
             {
                 writer.write(line + "\n");
@@ -60,7 +60,7 @@ public class IO
             writer.close();
         }catch(Exception e)
         {
-            System.out.println("Error writing the file " + filename + ": " + e.toString());
+            System.out.println("Error writing the file " + filename + ": " + e);
             e.printStackTrace();
             return false;
         }

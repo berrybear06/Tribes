@@ -71,7 +71,7 @@ public class TribeView extends JComponent {
                 s.append("<p><b>").append(t.getName()).append("</b> (").append(agentName).append(") ...........  ").append(t.getScore()).append(" points").append(w).append("</p>");
             }
 
-            if (!textArea.getText().equals(s.toString())) {
+            if (!textArea.getText().contentEquals(s)) {
                 textArea.setText(s.toString());
             }
         }

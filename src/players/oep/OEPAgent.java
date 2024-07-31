@@ -146,7 +146,7 @@ public class OEPAgent extends Agent {
         //if one less then max node size
         if(individual.size() == (params.NODE_SIZE-1) && (individual.get((params.NODE_SIZE-2)).getActionType() != Types.ACTION.END_TURN)){
             ArrayList<Action> allAvailableActions = this.allGoodActions(gs, m_rnd);
-            Action end = null; ;
+            Action end = null;
             for(Action a : allAvailableActions){
                 if(a.getActionType() == Types.ACTION.END_TURN){
                     end = a;
@@ -166,7 +166,7 @@ public class OEPAgent extends Agent {
         ArrayList<Individual> group1 = new ArrayList<>();
         ArrayList<Individual> group2 = new ArrayList<>();
 
-        while(population.size() > 0){
+        while(!population.isEmpty()){
             Individual[] winners = tournamentSelection(population);
 
             group1.add(winners[0]);
@@ -228,7 +228,7 @@ public class OEPAgent extends Agent {
             sameSize = true;
         }
         smallSize --;
-        if(!sameSize && in1.size() > 0){in1.remove(in1.size() - 1);}
+        if(!sameSize && !in1.isEmpty()){in1.remove(in1.size() - 1);}
         int in1amount =(int)(in1.size() / 2);
         int in2amount = in1.size() - in1amount;
         for(int i = 0; i < in2.size(); i++){
@@ -301,7 +301,7 @@ public class OEPAgent extends Agent {
         }
 
         ArrayList<Action> allAvailableActions = this.allGoodActions(gs, m_rnd);
-        Action end = null; ;
+        Action end = null;
         for(Action a : allAvailableActions){
             if(a.getActionType() == Types.ACTION.END_TURN){
                 end = a;
