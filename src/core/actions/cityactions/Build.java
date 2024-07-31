@@ -36,7 +36,7 @@ public class Build extends CityAction
     public Action copy() {
         Build build = new Build(this.cityId);
         build.setBuildingType(this.buildingType);
-        build.setTargetPos(this.targetPos.copy());
+        build.setTargetPos(this.targetPos);
         return build;
     }
 

@@ -28,7 +28,7 @@ public class Destroy extends CityAction
     @Override
     public Action copy() {
         Destroy destroy = new Destroy(this.cityId);
-        destroy.setTargetPos(this.targetPos.copy());
+        destroy.setTargetPos(this.targetPos);
         return destroy;
     }
 

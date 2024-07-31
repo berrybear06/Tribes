@@ -20,7 +20,7 @@ public class SpawnFactory implements ActionFactory {
         for(Types.UNIT unit: Types.UNIT.values()){
             Spawn newAction = new Spawn(city.getActorId());
             newAction.setUnitType(unit);
-            newAction.setTargetPos(city.getPosition().copy());
+            newAction.setTargetPos(city.getPosition());
             if (newAction.isFeasible(gs)) {
                 actions.add(newAction);
             }

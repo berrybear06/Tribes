@@ -13,7 +13,7 @@ public class BuildRoad extends TribeAction {
         super(Types.ACTION.BUILD_ROAD);
         this.tribeId = tribeId;
     }
-    public void setPosition(Vector2d position){ this.position = position.copy(); }
+    public void setPosition(Vector2d position){ this.position = position; }
     public Vector2d getPosition() { return position; }
 
     @Override

@@ -482,7 +482,7 @@ public class Board {
 
                 if (traversable(next.x, next.y, tribeId)) {
                     moved = true;
-                    currentPos = next.copy();
+                    currentPos = next;
                     boolean updateNetwork = tribes[tribeId].clearView(currentPos.x, currentPos.y, TribesConfig.EXPLORER_CLEAR_RANGE, rnd, this);
                     if(updateNetwork)
                         tradeNetwork.computeTradeNetworkTribe(this, tribes[tribeId]);

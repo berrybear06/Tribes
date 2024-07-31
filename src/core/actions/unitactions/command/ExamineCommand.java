@@ -45,7 +45,7 @@ public class ExamineCommand implements ActionCommand {
                 case SUPERUNIT:
                     Board board = gs.getBoard();
 
-                    Vector2d spawnPos = unit.getPosition().copy();
+                    Vector2d spawnPos = unit.getPosition();
                     Types.TERRAIN terr = board.getTerrainAt(spawnPos.x, spawnPos.y);
                     //instead of a super unit, in the water we create a Battleship of out a warrior
                     Types.UNIT unitType = terr.isWater() ? Types.UNIT.BATTLESHIP : Types.UNIT.SUPERUNIT;
@@ -76,7 +76,7 @@ public class ExamineCommand implements ActionCommand {
                     break;
 
                 case EXPLORER:
-                    spawnPos = unit.getPosition().copy();
+                    spawnPos = unit.getPosition();
                     gs.getBoard().launchExplorer(spawnPos.x, spawnPos.y, unit.getTribeId(), rnd);
                     break;
 

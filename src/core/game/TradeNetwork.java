@@ -182,11 +182,9 @@ class TradeNetwork
             double stepCost = 1.0;
 
             for(Vector2d tile : from.neighborhood(1, 0, size)) {
-                int x = tile.x;
-                int y = tile.y;
-                if(navigable[x][y] && costFrom+stepCost <= TribesConfig.PORT_TRADE_DISTANCE)
+                if(navigable[tile.x][tile.y] && costFrom+stepCost <= TribesConfig.PORT_TRADE_DISTANCE)
                 {
-                    neighbours.add(new PathNode(new Vector2d(x, y), stepCost));
+                    neighbours.add(new PathNode(tile, stepCost));
                 }
             }
 
@@ -235,11 +233,9 @@ class TradeNetwork
             double stepCost = 1.0;
 
             for(Vector2d tile : from.neighborhood(1, 0, size)) {
-                int x = tile.x;
-                int y = tile.y;
-                if(connected[x][y])
+                if(connected[tile.x][tile.y])
                 {
-                    neighbours.add(new PathNode(new Vector2d(x, y), stepCost));
+                    neighbours.add(new PathNode(tile, stepCost));
                 }
             }
 

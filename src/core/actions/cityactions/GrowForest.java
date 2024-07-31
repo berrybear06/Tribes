@@ -33,7 +33,7 @@ public class GrowForest extends CityAction
     @Override
     public Action copy() {
         GrowForest grow = new GrowForest(this.cityId);
-        grow.setTargetPos(this.targetPos.copy());
+        grow.setTargetPos(this.targetPos);
         return grow;
     }
 

@@ -951,19 +951,17 @@ public class GameView extends JComponent {
                 Pair<Image,Vector2d> target = sourceTargetAnimationInfo.get(i).getSecond();
 
                 // Sprite not yet reached its destination, paint current and calculate next
-                Vector2d currentPosition = source.getSecond().copy();
+                Vector2d currentPosition = source.getSecond();
 
                 // Next position, move closer to target
                 int xDir = (int) (CELL_SIZE * animationSpeed.get(i) * Math.signum(target.getSecond().x - currentPosition.x));
                 int yDir = (int) (CELL_SIZE * animationSpeed.get(i) * Math.signum(target.getSecond().y - currentPosition.y));
-                Vector2d nextPosition = Vector2d.add(source.getSecond(), new Vector2d(xDir, yDir));
-                source = new Pair<>(source.getFirst(), nextPosition.copy());
+                Vector2d nextPosition = new Vector2d(currentPosition.x + xDir, currentPosition.y + yDir);
+                source = new Pair<>(source.getFirst(), nextPosition);
                 sourceTargetAnimationInfo.set(i, new Pair<>(source, target));
 
                 // Rotate image in direction of travel
-                double dx = nextPosition.x - currentPosition.x;
-                double dy = nextPosition.y - currentPosition.y;
-                double imageAngleRad = Math.atan2(dx, dy);// + Math.toRadians(180);
+                double imageAngleRad = Math.atan2(nextPosition.x - currentPosition.x, nextPosition.y - currentPosition.y);// + Math.toRadians(180);
 
                 Vector2d rotated = rotatePoint(1.0 * currentPosition.x / CELL_SIZE, 1.0 * currentPosition.y / CELL_SIZE);
                 int x = rotated.x + CELL_SIZE / 2;
@@ -979,19 +977,16 @@ public class GameView extends JComponent {
                     effectDrawingIdx = 0;
 
                     boolean finishAnimation = true;
-                    if (animatedAction.getActionType() == ATTACK && target.getFirst() != null) {
-                        boolean retaliates = new AttackCommand().isRetaliation((Attack) animatedAction, gameState);
-                        if(retaliates) {
-                            // Retaliating! Reset variables to target's attack
-                            Vector2d startPosition = target.getSecond().copy();
-                            Vector2d targetPosition = board.getActor(animatedAction.getUnitId()).getPosition().copy();
-                            Vector2d endPosition = new Vector2d(targetPosition.y * CELL_SIZE, targetPosition.x * CELL_SIZE);
-                            source = new Pair<>(target.getFirst(), startPosition);
-                            target = new Pair<>(null, endPosition);
-                            actionAnimationUnitsTribe.get(i).swap();
-                            sourceTargetAnimationInfo.set(i, new Pair<>(source, target));
-                            finishAnimation = false;
-                        }
+                    if (animatedAction.getActionType() == ATTACK && target.getFirst() != null &&
+                            new AttackCommand().isRetaliation((Attack) animatedAction, gameState)
+                    ) {
+                        // Retaliating! Reset variables to target's attack
+                        Vector2d targetPosition = board.getActor(animatedAction.getUnitId()).getPosition();
+                        source = new Pair<>(target.getFirst(), target.getSecond());
+                        target = new Pair<>(null, new Vector2d(targetPosition.y * CELL_SIZE, targetPosition.x * CELL_SIZE));
+                        actionAnimationUnitsTribe.get(i).swap();
+                        sourceTargetAnimationInfo.set(i, new Pair<>(source, target));
+                        finishAnimation = false;
                     }
 
                     if(finishAnimation)

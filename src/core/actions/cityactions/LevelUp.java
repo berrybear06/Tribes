@@ -34,7 +34,7 @@ public class LevelUp extends CityAction {
     public Action copy() {
         LevelUp lUp = new LevelUp(this.cityId);
         lUp.setBonus(this.bonus);
-        lUp.setTargetPos(this.targetPos.copy());
+        lUp.setTargetPos(this.targetPos);
         return lUp;
     }
 

@@ -49,7 +49,7 @@ public class ResourceGathering extends CityAction
     public Action copy() {
         ResourceGathering res = new ResourceGathering(this.cityId);
         res.setResource(this.resource);
-        res.setTargetPos(targetPos.copy());
+        res.setTargetPos(targetPos);
         return res;
     }
 
