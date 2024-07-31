@@ -958,6 +958,7 @@ public class GameView extends JComponent {
                 int yDir = (int) (CELL_SIZE * animationSpeed.get(i) * Math.signum(target.getSecond().y - currentPosition.y));
                 Vector2d nextPosition = Vector2d.add(source.getSecond(), new Vector2d(xDir, yDir));
                 source = new Pair<>(source.getFirst(), nextPosition.copy());
+                sourceTargetAnimationInfo.set(i, new Pair<>(source, target));
 
                 // Rotate image in direction of travel
                 double dx = nextPosition.x - currentPosition.x;
