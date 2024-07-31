@@ -1,12 +1,9 @@
 package core.actions.cityactions;
 
-import core.TechnologyTree;
 import core.Types;
 import core.actions.Action;
-import core.actors.Tribe;
 import core.game.Board;
 import core.game.GameState;
-import core.actors.City;
 import utils.Vector2d;
 
 public class Build extends CityAction
@@ -30,9 +27,9 @@ public class Build extends CityAction
         // Buildings that must be unique in a tribe (i.e. monuments)
         if (buildingType.isMonument()) {
             boolean monumentNotBuilt = gs.getTribe(gs.getActor(this.cityId).getTribeId()).isMonumentBuildable(buildingType);
-            return monumentNotBuilt && isBuildable(gs, buildingType.getCost(), false);
+            return monumentNotBuilt && isBuildable(gs);
         }
-        return isBuildable(gs, buildingType.getCost(), buildingType.isCityUnique());
+        return isBuildable(gs);
     }
 
     @Override
@@ -43,14 +40,8 @@ public class Build extends CityAction
         return build;
     }
 
-    private boolean isBuildable(final GameState gs, int cost, boolean checkIfUnique) {
-        Tribe tribe = gs.getTribe(gs.getActor(this.cityId).getTribeId());
-        if (tribe.getStars() < cost) return false; // Cost constraint
-
-        if (buildingType.getTechnologyRequirement() != null &&
-                !tribe.getTechTree().isResearched(buildingType.getTechnologyRequirement())
-        )
-            return false; // Technology constraint
+    private boolean isBuildable(final GameState gs) {
+        // Cost and tech constraints moved to build factory
 
         Board board = gs.getBoard();
         //Resource constraint
@@ -75,16 +66,9 @@ public class Build extends CityAction
                 }
             }
 
-            if(!adjFound) return false;
+            return adjFound;
         }
-
-        //Uniqueness constrain
-        if(checkIfUnique) {
-            for(Vector2d tile : board.getCityTiles(this.cityId)) {
-                if(board.getBuildingAt(tile.x, tile.y) == buildingType) { return false; }
-            }
-        }
-
+        // Uniqueness constraint moved to build factory
         return true;
     }
 
