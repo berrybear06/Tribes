@@ -27,44 +27,12 @@ public class Build extends CityAction
 
     @Override
     public boolean isFeasible(final GameState gs) {
-
-        switch (buildingType) {
-            //Buildings that can be repeated in a city:
-            case PORT:
-            case FARM:
-            case MINE:
-            case LUMBER_HUT:
-            case TEMPLE:
-            case WATER_TEMPLE:
-            case MOUNTAIN_TEMPLE:
-            case FOREST_TEMPLE:
-                return isBuildable(gs, buildingType.getCost(), false);
-
-            //Buildings that must be unique in a city
-            case SAWMILL:
-            case CUSTOMS_HOUSE:
-            case WINDMILL:
-            case FORGE:
-                return isBuildable(gs, buildingType.getCost(), true);
-
-            //Buildings that must be unique in a tribe (i.e. monuments)
-            case ALTAR_OF_PEACE:
-            case EMPERORS_TOMB:
-            case EYE_OF_GOD:
-            case GATE_OF_POWER:
-            case PARK_OF_FORTUNE:
-            case TOWER_OF_WISDOM:
-            case GRAND_BAZAR:
-                boolean buildingConstraintsOk = isBuildable(gs, buildingType.getCost(), false);
-                if(buildingConstraintsOk)
-                {
-                    City city = (City) gs.getActor(this.cityId);
-                    Tribe tribe = gs.getTribe(city.getTribeId());
-                    return tribe.isMonumentBuildable(buildingType);
-                }
-                else return false;
+        // Buildings that must be unique in a tribe (i.e. monuments)
+        if (buildingType.isMonument()) {
+            boolean monumentNotBuilt = gs.getTribe(gs.getActor(this.cityId).getTribeId()).isMonumentBuildable(buildingType);
+            return monumentNotBuilt && isBuildable(gs, buildingType.getCost(), false);
         }
-        return false;
+        return isBuildable(gs, buildingType.getCost(), buildingType.isCityUnique());
     }
 
     @Override
@@ -76,31 +44,22 @@ public class Build extends CityAction
     }
 
     private boolean isBuildable(final GameState gs, int cost, boolean checkIfUnique) {
-        City city = (City) gs.getActor(this.cityId);
-        Tribe tribe = gs.getTribe(city.getTribeId());
+        Tribe tribe = gs.getTribe(gs.getActor(this.cityId).getTribeId());
+        if (tribe.getStars() < cost) return false; // Cost constraint
+
+        if (buildingType.getTechnologyRequirement() != null &&
+                !tribe.getTechTree().isResearched(buildingType.getTechnologyRequirement())
+        )
+            return false; // Technology constraint
+
         Board board = gs.getBoard();
-        TechnologyTree techTree = tribe.getTechTree();
-        int stars = tribe.getStars();
-
-        //Cost constraint
-        if(cost > 0 && stars < cost) { return false; }
-
-        //Technology constraint
-        if(buildingType.getTechnologyRequirement() != null &&
-                !techTree.isResearched(buildingType.getTechnologyRequirement())) { return false; }
+        //Resource constraint
+        Types.RESOURCE resNeeded = buildingType.getResourceConstraint();
+        if (resNeeded != null && resNeeded != board.getResourceAt(targetPos.x, targetPos.y)) // if there's a constraint, resource at location must be what's needed
+            return false;
 
         //Terrain constraint
         if (!(buildingType.getTerrainRequirements().contains(board.getTerrainAt(targetPos.x, targetPos.y)))) return false;
-
-        //Resource constraint
-        Types.RESOURCE resNeeded = buildingType.getResourceConstraint();
-        if (resNeeded != null)
-        {
-            //if there's a constraint, resource at location must be what's needed.
-            Types.RESOURCE resAtLocation = board.getResourceAt(targetPos.x, targetPos.y);
-            if(resAtLocation == null || resNeeded != resAtLocation)
-                return false;
-        }
 
         //Adjacency constraint
         Types.BUILDING buildingNeeded = buildingType.getAdjacencyConstraint();

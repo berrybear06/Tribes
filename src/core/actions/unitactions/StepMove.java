@@ -2,6 +2,7 @@ package core.actions.unitactions;
 
 import core.Types;
 import core.actors.City;
+import core.actors.Tribe;
 import core.actors.units.Unit;
 import core.game.Board;
 import core.game.GameState;
@@ -57,12 +58,13 @@ public class StepMove implements NeighbourHelper
         }
 
         Board board = gs.getBoard();
+        Tribe tribe = board.getTribe(unit.getTribeId());
         boolean onRoad = false;
 
         //Check if unit is on a neutral or a friendly road, cities also count as roads.
         if(board.isRoad(from.x, from.y) || board.getTerrainAt(from.x, from.y) == Types.TERRAIN.CITY){
             int cityId = board.getCityIdAt(from.x, from.y);
-            onRoad = cityId == -1 || board.getTribe(unit.getTribeId()).controlsCity(cityId);
+            onRoad = cityId == -1 || tribe.controlsCity(cityId);
         }
 
         //Each one of the tree nodes added to "neighbours" must have a position (x,y) and also the cost of moving there from "from":
@@ -72,29 +74,20 @@ public class StepMove implements NeighbourHelper
             Types.TERRAIN terrain = board.getTerrainAt(tile.x, tile.y);
 
             //Can't move to tiles where there's a non-friendly unit
-            Unit otherUnit = board.getUnitAt(tile.x, tile.y);
-            if (otherUnit != null && otherUnit.getTribeId() != unit.getTribeId())
-            {
-                continue;
-            }
-
-            //Check if there is an enemy unit adjacent to the destination.
-            boolean zoneOfControl = zoneOfControlMap[tile.x][tile.y];
-
             // Cannot move into tiles that have not been discovered yet.
             // Check if current research allows movement to this tile.
-            if (!gs.getTribe(unit.getTribeId()).isVisible(tile.x, tile.y) ||
-                    !board.traversable(tile.x, tile.y, unit.getTribeId()))
+            Unit otherUnit = board.getUnitAt(tile.x, tile.y);
+            if (otherUnit != null && otherUnit.getTribeId() != unit.getTribeId() ||
+                    !gs.getTribe(unit.getTribeId()).isVisible(tile.x, tile.y) ||
+                    !board.traversable(tile.x, tile.y, unit.getTribeId())
+            )
                 continue;
 
             //Mind benders cannot move into an enemy city tile.
-            if (unit.getType() == Types.UNIT.MIND_BENDER && terrain == Types.TERRAIN.CITY) {
-                City targetCity = (City) board.getActor(board.getCityIdAt(tile.x, tile.y));
-                //The city belongs to the enemy.
-                if (targetCity.getTribeId() != unit.getTribeId()) {
-                    continue;
-                }
-            }
+            if (unit.getType() == Types.UNIT.MIND_BENDER && terrain == Types.TERRAIN.CITY &&
+                    board.getActor(board.getCityIdAt(tile.x, tile.y)).getTribeId() != unit.getTribeId()
+            )
+                continue;
 
             double stepCost;
             if (unit.getType().isWaterUnit()) //Unit is a water unit
@@ -109,14 +102,14 @@ public class StepMove implements NeighbourHelper
                 //This movement boost applies only to ground units.
                 if (onRoad && (board.isRoad(tile.x, tile.y) || terrain == Types.TERRAIN.CITY)) {
                     int cityId = board.getCityIdAt(from.x, from.y);
-                    if (cityId == -1 || board.getTribe(unit.getTribeId()).controlsCity(cityId)) {
+                    if (cityId == -1 || tribe.controlsCity(cityId)) {
                         stepCost = 0.5;
                     }
                 }
             }
 
             // Moving to zone of control is never a problem, but it consumes all the rest of the movement.
-            if(zoneOfControl)
+            if (zoneOfControlMap[tile.x][tile.y])
                 stepCost = MAX_STEP_COST;
             //No zone of control, allow movement if part of MOV is still available.
             neighbours.add(new PathNode(tile, stepCost));
