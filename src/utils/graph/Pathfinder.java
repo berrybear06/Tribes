@@ -44,7 +44,6 @@ public class Pathfinder
         return _dijkstra();
     }
 
-    //A* to destination
     public ArrayList<PathNode> findPathTo(Vector2d goalPosition)
     {
         return _findPath(new PathNode(goalPosition));
@@ -70,8 +69,8 @@ public class Pathfinder
             ArrayList<PathNode> neighbours = provider.getNeighbours(current.getPosition(), current.getTotalCost());
             for (PathNode nb : neighbours) {
                 if (!visited.contains(nb)) {
-                    double nbCost = current.getTotalCost() + nb.getTotalCost();
-                    nb.setTotalCost(nbCost);
+                    nb.setTotalCost(current.getTotalCost() + nb.getTotalCost());
+                    nb.setParent(current);
                     openList.add(nb);
                 }
             }
@@ -82,109 +81,12 @@ public class Pathfinder
 
     private ArrayList<PathNode> _findPath(PathNode goal)
     {
-        // TODO this method repeats calculations that are already done in _dijsktra above, could be made a lot more
-        // efficient to avoid re-calculating neighbours
-
-        nodes = new HashSet<>();
-        PathNode node = null;
-        PriorityQueue<PathNode> openList = new PriorityQueue<>();
-        PriorityQueue<PathNode> closedList = new PriorityQueue<>();
-
-        root.setTotalCost(0.0);
-        double dist = Vector2d.chebychevDistance(root.getPosition(), goal.getPosition());
-        root.setEstimatedCost(dist);
-        openList.add(root);
-        nodes.add(root);
-
-        while(!openList.isEmpty())
-        {
-            node = openList.poll();
-            //nodes.add(node);
-            closedList.add(node);
-
-            if(node.getX() == goal.getX() && node.getY() == goal.getY())
-                return calculatePath(node);
-
-            ArrayList<PathNode> neighbours = provider.getNeighbours(node.getPosition(), node.getTotalCost());
-
-            for (PathNode nb : neighbours) {
-                // This neighbour is a new object, it will not have any of the costs set up
-                // use the cached nodes HashSet to find the correct object with the information available,
-                // only missing estimated distance
-                double nbCost = nb.getTotalCost();
-                boolean inCache = false;
-
-                PathNode neighbour = null;
-                if (nodes != null) {
-                    for (PathNode n2 : nodes) {
-                        if (nb.equals(n2)) {
-                            neighbour = n2;
-                            inCache = true;
-                            break;
-                        }
-                    }
-                }
-                if (neighbour == null) {
-                    neighbour = nb;  // Node was not found in cache
-                }
-
-                if (!openList.contains(neighbour) && !closedList.contains(neighbour)) {
-                    neighbour.setTotalCost(nbCost + node.getTotalCost());
-                    dist = Vector2d.chebychevDistance(neighbour.getPosition(), goal.getPosition());
-                    neighbour.setEstimatedCost(dist);
-                    neighbour.setParent(node);
-
-                    openList.add(neighbour);
-                    nodes.add(neighbour);
-
-                } else if (nbCost + node.getTotalCost() < neighbour.getTotalCost()) {
-                    neighbour.setTotalCost(nbCost + node.getTotalCost());
-                    neighbour.setParent(node);
-
-                    openList.remove(neighbour);
-                    closedList.remove(neighbour);
-
-                    openList.add(neighbour);
-                }
+        ArrayList<PathNode> reachable = _dijkstra();
+        for (PathNode n: reachable) {
+            if (n.getX() == goal.getX() && n.getY() == goal.getY()) {
+                return calculatePath(n);
             }
-
         }
-
-        if(node == null || node.getX() != goal.getX() || node.getY() != goal.getY()) //not the goal
-            return null;
-
-        return calculatePath(node);
-
+        return null;
     }
-
-
-
-
-//    public void printPath(int pathId, ArrayList<Node> nodes)
-//    {
-//        if(nodes == null)
-//        {
-//            System.out.println("No Path");
-//            return;
-//        }
-//
-//        int[][] endsIds =  new int[2][2];
-//
-//        int org =  pathId / 10000;
-//        int dest = pathId % 10000;
-//
-//        endsIds[0] = new int[]{org/100 , org%100};
-//        endsIds[1] = new int[]{dest/100 , dest%100};
-//
-//        String ends = "(" + endsIds[0][0] + "," + endsIds[0][1] + ") -> ("
-//                + endsIds[1][0] + "," + endsIds[1][1] + ")";
-//
-//
-//        System.out.print("Path " + ends + "; ("+ nodes.size() + "): ");
-//        for(Node n : nodes)
-//        {
-//            System.out.print(n.getX() + ":" + n.getY() + ", ");
-//        }
-//        System.out.println();
-//    }
 }
