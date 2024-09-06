@@ -248,16 +248,14 @@ public class City extends Actor{
     }
 
     /**
-     * Gets the production associated to this city. If the population is negative, the production is the population
-     * value. If not, it's the level + prodiction + TribesConfig.PROD_CAPITAL_BONUS (if capital)
+     * Gets the production associated to this city. If the population is negative, the production decreases by the population
+     * value. By default, production equals the level + production + TribesConfig.PROD_CAPITAL_BONUS (if capital)
      * @return the production of this city
      */
     public int getProduction(){
-        if(population >= 0) {
-            int capitalBonus = isCapital ? TribesConfig.PROD_CAPITAL_BONUS : 0;
-            return level + production + capitalBonus;
-        }
-        return population;
+        int capitalBonus = isCapital ? TribesConfig.PROD_CAPITAL_BONUS : 0;
+        int spt = level + production + capitalBonus + Math.min(population, 0);
+        return Math.max(spt, 0);
     }
 
     /**
