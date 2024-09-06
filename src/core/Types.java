@@ -143,12 +143,18 @@ public class Types {
      * Defines the status of the turn for a unit
      */
     public enum TURN_STATUS {
-        FRESH,
-        MOVED,
-        ATTACKED,
-        MOVED_AND_ATTACKED,
-        PUSHED,
-        FINISHED
+        FRESH(0),
+        MOVED(1),
+        ATTACKED(2),
+        MOVED_AND_ATTACKED(3),
+        PUSHED(4),
+        FINISHED(5);
+
+        private int key;
+
+        TURN_STATUS(int key) { this.key = key; }
+
+        public int getKey() { return key; }
     }
 
     /**

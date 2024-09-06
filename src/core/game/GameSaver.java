@@ -250,6 +250,7 @@ class GameSaver {
         uInfo.put("cityID", u.getCityId());
         uInfo.put("tribeId", u.getTribeId());
         uInfo.put("currentHP", u.getCurrentHP());
+        uInfo.put("status", u.getStatus().getKey());
         return uInfo;
     }
 
