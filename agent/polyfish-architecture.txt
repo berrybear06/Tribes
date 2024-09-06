@@ -1,0 +1,131 @@
+Network architecture of Polyfish
+
+Parameters:
+    SIZE of square board
+
+Inputs:
+    prev_state
+    entity_list
+    map
+    scalar_features
+    (opponent_observations)
+    (cumulative_score)
+
+
+
+
+Entity encoder:
+    Input: units, cities
+    Outputs: embedded_entity, entity_embeddings
+
+Each entry in entity_list:
+unit_type: one-hot (9: warrior, rider, defender, swordsman, archer, catapult, knight, mind bender, super unit)
+boat_type: one-hot (4: land unit, boat, ship, battleship)
+current_health: one-hot of floor of sqrt(min(current_health, 40)) (6 to exclude 0 health)
+x_position: binary encoding of x coordinate in tiles (ceil of log_2 (SIZE+1))
+y_position: binary encoding of y coordinate in tiles (ceil of log_2 (SIZE+1))
+has_home_city: one-hot (2)
+home_city_x: binary encoding of x coordinate of home city in tiles (ceil of log_2 (SIZE+1))
+home_city_y: binary encoding of y coordinate of home city in tiles (ceil of log_2 (SIZE+1))
+player: one-hot of unit/city belonging to self or enemy (2)
+is_veteran: one-hot (2)
+kills: one-hot (4: 0, 1, 2, 3+)
+is_capital: one-hot (2)
+has_walls: one-hot (2)
+level: one-hot (10: 1...10, considering level 10+ cities as level 10)
+production: float of sqrt(stars per turn)
+occupancy: one-hot of occupancy divided by (level+1) rounded down to the tenth (10: 0.0 ... 0.9)
+population: one-hot of population divided by (level+1) rounded down to the tenth (10: 0.0 ... 0.9)
+limited_buildings: one-hots of whether city has a sawmill, windmill, and/or forge (6)
+
+
+Kills of a veteran unit are set to 0.
+Inputs associated with location of home city are all 0 if unit has no home city. 
+
+entity_list has length SIZE*SIZE*10/9 (maximum possible units and cities) with extra entries set to -1e9
+
+Transformer with 2 layers
+Layer: 2 self attention heads with size 32 KQV, conv1d to double to 64 channels, sum,
+    2-layer mlp with hidden size 128+relu and output size 64
+Output thru relu, conv1d with 64 channels, relu -> unit_embeddings
+
+Mean of entity_embeddings over non null units thru linear layer (64) to get embedded_entity
+
+
+
+
+Spatial encoder:
+    Input: entity_embeddings, board
+    Output: embedded_spatial, map_skip
+
+visible (2)
+entity_owner (2)
+terrain (5: plains, mountain, forest, water, ocean)
+resource_or_ruin (7: fruit, game, fish, metal, crop, whale, ruin)
+building (8+4+7: lumber hut, farm, mine, sawmill, windmill, forge, customs house, port;
+    plains, mountain, forest, ocean temples;
+    7 monuments)
+village_or_city (2 booleans)
+can_build: one_hot no ruin, building, temple, monument, village, or city (2)
+networked (2)
+
+scattered_entities (16)
+scattered_owning_city (8)
+
+
+
+
+Scalar encoder:
+    Input: scalar_features, entity_list
+
+Each feature passed thru a linear + relu. (initial size -> final size)
+
+tribe: one-hot of four known, one unknown (5 -> 8)
+opponent_tribe: same as tribe (5 -> 8)
+stars_per_turn: one-hot of floor of sqrt(min(SPT, 64)) (9 -> 8)
+score: one-hot of floor of 4*log(min(score+1, 10000) (17 -> 8)
+opponent_score: same as score (17 -> 8)
+technology (24 -> 64)
+time: positional encoding (32)
+kills: one-hot of min(kills, 10) (11 -> 8)
+pacifist_count: one-hot of min(pacifist_count, 5) (6 -> 8)
+connected_cities: one-hot of min(connected_cities, 5) (6 -> 8)
+tiles_visible: one-hot of floor of 10 * (visible tiles) / (total tiles) (11 -> 8)
+
+Added to scalar_context as well:
+stars: one-hot of floor of sqrt(min(stars, 256)) (17 -> 16)
+previous_action: one-hot of previous action type, counting each non-road building (20 other + 19 build -> 64)
+available_actions: same as previous_action (39 -> 64)
+unit_counts_agent: sqrt of unit counts (12 -> 32)
+unit_counts_opponent: same as unit_counts_agent (12 -> 32)
+units_fresh: one_hot of floor of 10 * (fresh units) / (total units) (11 -> 8)
+units_can_move: same as units_fresh (11 -> 8)
+units_can_attack: same as units_fresh (11 -> 8)
+
+TODO unit is fresh/can move/can attack
+TODO hide non visible entities
+
+
+Core
+
+Action type head
+
+Location head (for all other actions), tech head (for research)
+
+Target head (for move/attack/convert), unit head (for spawn), building head (for build), upgrade head (for level up reward)
+
+Autoregressive embedding flow:
+Action type -> location, tech
+Location -> target, unit, building, upgrade
+
+
+
+
+Winloss baseline (value func)
+
+
+Losses:
+Winloss reward (won or lost the game)
+Winloss split vtrace actor-critic tdlambda upgo loss (black magic based on value function)
+Entropy loss (applied to all parameters that determine the action type, to encourage varied action choices)
+Distillation loss (match the output of the supervised policy)
