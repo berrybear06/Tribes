@@ -1,5 +1,5 @@
 import json
-from interface import Parser
+from agent.interface import Parser
 
 # path = input("Path to game.json: ")
 path = r"C:\Users\jerry\Downloads\Tribes\save\1722469115074\0_1\game.json"

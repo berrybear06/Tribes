@@ -1,5 +1,5 @@
-from config import MAP_SIZE
-from interface.utils import one_hot
+from agent.config import MAP_SIZE
+from agent.interface.utils import one_hot
 from math import sqrt, log
 
 

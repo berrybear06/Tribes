@@ -1,3 +1,3 @@
-from interface.parsers.entity import EntityParser
-from interface.parsers.map import MapParser
-from interface.parsers.scalar import ScalarParser
+from agent.interface.parsers.entity import EntityParser
+from agent.interface.parsers.map import MapParser
+from agent.interface.parsers.scalar import ScalarParser

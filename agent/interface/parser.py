@@ -1,5 +1,5 @@
-from config import MAP_SIZE
-from interface import parsers
+from agent.config import MAP_SIZE
+from agent.interface import parsers
 
 
 class Parser:

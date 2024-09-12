@@ -1,8 +1,8 @@
 import random
 from math import ceil, log, sqrt
 
-from config import MAP_SIZE, MAX_ENTITIES
-from interface.utils import one_hot
+from agent.config import MAP_SIZE, MAX_ENTITIES
+from agent.interface.utils import one_hot
 
 
 class EntityParser:
