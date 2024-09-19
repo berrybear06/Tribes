@@ -41,21 +41,26 @@ class MapParser:
 		self.RESOURCE_MAPPING = resource_mapping or [0, 1, 2, 3, -1, 4, 5, 6]
 
 	def parse_map(self, game_state, tribe_id):
+		parsed_map = [[None] * self.MAP_SIZE for _ in range(self.MAP_SIZE)]
+		parsed_owners = [[None] * self.MAP_SIZE for _ in range(self.MAP_SIZE)]
+		for x in range(self.MAP_SIZE):
+			for y in range(self.MAP_SIZE):
+				parsed_tile, parsed_owner = self.parse_tile(game_state, x, y, tribe_id)
+				parsed_map[x][y] = parsed_tile
+				parsed_owners[x][y] = parsed_owner
+		return parsed_map, parsed_owners
+
+	def parse_tile(self, game_state, x, y, tribe_id):
 		board = game_state["board"]
 		units = game_state["unit"]
 		tribes = game_state["tribes"]
-		parsed_map = [[None] * self.MAP_SIZE for _ in range(self.MAP_SIZE)]
-		for x in range(self.MAP_SIZE):
-			for y in range(self.MAP_SIZE):
-				unit_id = board["unitID"][x][y]
-				unit = None
-				if unit_id != 0:
-					unit = units[str(unit_id)]
-				tribe = tribes[str(tribe_id)]
-				parsed_map[x][y] = self.parse_tile(x, y, board, unit, tribe, tribe_id)
-		return parsed_map
 
-	def parse_tile(self, x, y, board, unit, tribe, tribe_id):
+		unit_id = board["unitID"][x][y]
+		unit = None
+		if unit_id != 0:
+			unit = units[str(unit_id)]
+		tribe = tribes[str(tribe_id)]
+
 		is_visible = tribe["obsGrid"][x][y]
 		visible = one_hot(int(is_visible), 2)
 
@@ -93,9 +98,15 @@ class MapParser:
 			result.extend(village_or_city)
 			result.extend(can_build)
 			result.extend(networked)
-			return result
+
+			_cityId = board["cityID"][x][y]
+			_owner = 0 if _cityId == -1 else 1 if game_state["city"][str(_cityId)]["tribeID"] == tribe_id else 2
+			owner = one_hot(_owner, 3)
+			return result, owner
 
 		else:
 			result = visible
 			result.extend([0] * (2 + self.TERRAIN_TYPES + self.RESOURCE_TYPES + self.BUILDING_TYPES + 2 + 2 + 2))
-			return result
+
+			owner = one_hot(-1, 3)
+			return result, owner

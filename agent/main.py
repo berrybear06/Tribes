@@ -7,4 +7,4 @@ with open(path) as f:
 	game_state = json.load(f)
 	p = Parser()
 	parsed_state = p.parse(game_state)
-	print(parsed_state)
+	print(parsed_state["agent"]["entity_list"][0].size(), parsed_state["agent"]["map"][0].size())

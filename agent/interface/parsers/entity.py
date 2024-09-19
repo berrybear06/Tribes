@@ -46,19 +46,47 @@ class EntityParser:
 		self.BIN_SIZE = ceil(log(self.MAP_SIZE + 1, 2))
 		self.HEALTH_SIZE = int(sqrt(self.MAX_HEALTH))
 
+		self.ENTITY_CHANNELS = 86
+
 	def parse_entities(self, units, cities, tribe_id):
 		parsed_entities = []
+		entity_x = []
+		entity_y = []
 		city_indices = {}
+		non_null_mask = []
 		units_to_parse = list(units.values())
-		if len(units) + len(cities) > self.MAX_ENTITIES:  # remove units at random
+
+		# remove units at random
+		if len(units) + len(cities) > self.MAX_ENTITIES:
 			for _ in range(len(units) + len(cities) - self.MAX_ENTITIES):
 				units_to_parse.pop(random.randint(0, len(units_to_parse) - 1))
+
 		for unit in units_to_parse:
 			parsed_entities.append(self.parse_unit(unit, cities, tribe_id))
+			entity_x.append(unit["x"])
+			entity_y.append(unit["y"])
+			non_null_mask.append(1)
+
 		for city_id, city in cities.items():
 			parsed_entities.append(self.parse_city(city, tribe_id))
+			entity_x.append(city["x"])
+			entity_y.append(city["y"])
 			city_indices[city_id] = len(parsed_entities) - 1
-		return {"entity_list": parsed_entities, "city_indices": city_indices}
+			non_null_mask.append(1)
+
+		# Pad lists to max entity count
+		if len(parsed_entities) < self.MAX_ENTITIES:
+			parsed_entities.extend([0]*self.ENTITY_CHANNELS for _ in range(self.MAX_ENTITIES - len(parsed_entities)))
+			non_null_mask.extend([0]*(self.MAX_ENTITIES - len(non_null_mask)))
+
+		print(len(non_null_mask))
+		return {
+			"entity_list": parsed_entities,
+			"entity_x": entity_x,
+			"entity_y": entity_y,
+			"city_indices": city_indices,
+			"non_null_mask": non_null_mask
+		}
 
 	def parse_unit(self, unit, cities, tribe_id):
 		_utype = unit["type"]
@@ -93,7 +121,8 @@ class EntityParser:
 
 		is_veteran = one_hot(int(unit["isVeteran"]), 2)
 
-		kills = one_hot(min(unit["kill"], 3), 4)
+		_kills = 0 if unit["isVeteran"] else min(unit["kill"], 3)
+		kills = one_hot(_kills, 4)
 
 		result = unit_type
 		result.extend(boat_type)
