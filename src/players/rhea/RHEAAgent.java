@@ -58,8 +58,7 @@ public class RHEAAgent extends Agent {
         newTurn = false;
 
         Action toExecute = pop.get(0).getActions().get(0);
-//        System.out.println(currentTurn + ":" + actionInTurn + ": toExecute: " + toExecute);
-
+        System.out.println("[rhea] " + currentTurn + ":" + actionInTurn + ": toExecute: " + toExecute);
         return toExecute;
     }
 

@@ -94,7 +94,7 @@ public class SimpleAgent extends Agent {
         }
 
 //        System.out.println(bestActionScore + " " + chosenAction);
-
+        System.out.println("[rb] " + gs.getTick() + ":" + "x" + ": toExecute: " + chosenAction);
         return chosenAction;
     }
 

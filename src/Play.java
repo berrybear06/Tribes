@@ -13,6 +13,8 @@ import static core.Types.GAME_MODE.*;
 /**
  * Entry point of the framework.
  */
+// bugs: rhea v rhea mirror match one self grief; test water movement
+// TODO incrementally update move actions, disable declare war/send stars
 public class Play {
 
     private static boolean RUN_VERBOSE = true;
