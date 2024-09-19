@@ -30,9 +30,10 @@ with open(path) as f:
 # Create the model
 model = Torso(
 	max_entities=MAX_ENTITIES,
-	entity_input_size=86,  # Example size
+	entity_input_size=88,  # Example size
 	entity_hidden_size=4,
-	entity_output_size=5,
+	entity_embed_size=5,
+	entity_embed_all_size=10,
 	entity_scatter_size=6,
 	city_scatter_size=7,
 	player_scatter_size=8,
@@ -52,7 +53,7 @@ data_loader = DataLoader(game_state_dataset, batch_size=2, shuffle=False)
 # Iterate over the DataLoader and run the model on the batches
 for batch_idx, batch in enumerate(data_loader):
 	output = model(batch)
-	print(f"Batch {batch_idx + 1} output shape: {output.shape}")
+	print(f"Batch {batch_idx + 1} output shape: {output[0].shape}, {output[1].shape}")
 
 	# For testing, just run one batch
 	break

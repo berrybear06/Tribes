@@ -9,6 +9,7 @@ class EntityParser:
 	"""
 	Parses units into the following agent-readable format.
 
+	entity_type: whether the entity is a unit or city, one-hot (2)
 	unit_type: one-hot (9: warrior, rider, defender, swordsman, archer, catapult, knight, mind bender, super unit)
 	boat_type: one-hot (4: land unit, boat, ship, battleship)
 	current_health: one-hot of floor of sqrt(min(current_health, 40)) (6 to exclude 0 health)
@@ -23,9 +24,10 @@ class EntityParser:
 	is_capital: one-hot (2)
 	has_walls: one-hot (2)
 	level: one-hot (10: 1...10, considering level 10+ cities as level 10)
-	production: float of stars per turn divided by level
+	production: float of sqrt(stars per turn)
 	occupancy: one-hot of occupancy divided by (level+1) rounded down to the tenth (10: 0.0 ... 0.9)
 	population: one-hot of population divided by (level+1) rounded down to the tenth (10: 0.0 ... 0.9)
+	limited_buildings: one-hots of whether city has a sawmill, windmill, and/or forge (6)
 	"""
 
 	def __init__(
@@ -46,19 +48,49 @@ class EntityParser:
 		self.BIN_SIZE = ceil(log(self.MAP_SIZE + 1, 2))
 		self.HEALTH_SIZE = int(sqrt(self.MAX_HEALTH))
 
-		self.ENTITY_CHANNELS = 86
+		self.ENTITY_CHANNELS = 88
 
-	def parse_entities(self, units, cities, tribe_id):
+	def parse_entities(self, game_state, tribe_id):
+		"""
+		Parses the units and cities in the game, excluding those hidden by fog of war.
+		Above the limit of MAX_ENTITIES, units are removed at random.
+
+		:param game_state: the game state in JSON format
+		:param tribe_id: the tribe ID of the agent, either 0 or 1
+		:return: a dictionary containing
+			entity_list, a list of parsed entities padded to a length of MAX_ENTITIES;
+			entity_x, a list of entity x-coordinates;
+			entity_y, a list of entity y-coordinates;
+			city_indices, a dictionary of indexes in entity_list by city ID; and
+			non_null_mask, a mask of the entries in entity_list that are not padding
+		"""
+
+		units = game_state["unit"]
+		cities = game_state["city"]
+
 		parsed_entities = []
 		entity_x = []
 		entity_y = []
 		city_indices = {}
 		non_null_mask = []
-		units_to_parse = list(units.values())
 
-		# remove units at random
-		if len(units) + len(cities) > self.MAX_ENTITIES:
-			for _ in range(len(units) + len(cities) - self.MAX_ENTITIES):
+		visible = game_state["tribes"][str(tribe_id)]["obsGrid"]
+
+		units_to_parse = []
+		for _, unit in units.items():
+			if visible[unit["x"]][unit["y"]]:
+				units_to_parse.append(unit)
+
+		city_ids_to_parse, cities_to_parse = [], []
+		for city_id, city in cities.items():
+			if visible[city["x"]][city["y"]]:
+				city_ids_to_parse.append(city_id)
+				cities_to_parse.append(city)
+
+		# If over limit, remove units at random
+		num_units_to_remove = len(units_to_parse) + len(cities) - self.MAX_ENTITIES
+		if num_units_to_remove > 0:
+			for _ in range(num_units_to_remove):
 				units_to_parse.pop(random.randint(0, len(units_to_parse) - 1))
 
 		for unit in units_to_parse:
@@ -67,7 +99,7 @@ class EntityParser:
 			entity_y.append(unit["y"])
 			non_null_mask.append(1)
 
-		for city_id, city in cities.items():
+		for city_id, city in zip(city_ids_to_parse, cities_to_parse):
 			parsed_entities.append(self.parse_city(city, tribe_id))
 			entity_x.append(city["x"])
 			entity_y.append(city["y"])
@@ -89,6 +121,8 @@ class EntityParser:
 		}
 
 	def parse_unit(self, unit, cities, tribe_id):
+		entity_type = one_hot(0, 2)
+
 		_utype = unit["type"]
 		if _utype == 11:
 			_utype = 8 # Change super unit's id
@@ -124,7 +158,8 @@ class EntityParser:
 		_kills = 0 if unit["isVeteran"] else min(unit["kill"], 3)
 		kills = one_hot(_kills, 4)
 
-		result = unit_type
+		result = entity_type
+		result.extend(unit_type)
 		result.extend(boat_type)
 		result.extend(current_health)
 		result.extend(x_position)
@@ -140,6 +175,8 @@ class EntityParser:
 		return result
 
 	def parse_city(self, city, tribe_id):
+		entity_type = one_hot(1, 2)
+
 		x_position = encode_binary(city["x"], self.BIN_SIZE)
 		y_position = encode_binary(city["y"], self.BIN_SIZE)
 
@@ -171,12 +208,13 @@ class EntityParser:
 		limited_buildings.extend(one_hot(int(has_windmill), 2))
 		limited_buildings.extend(one_hot(int(has_forge), 2))
 
-		results = [0]*(self.UNIT_TYPES + self.BOAT_TYPES + self.HEALTH_SIZE) # unit_type boat_type current_health
+		results = entity_type
+		results.extend([0]*(self.UNIT_TYPES + self.BOAT_TYPES + self.HEALTH_SIZE))  # unit_type boat_type current_health
 		results.extend(x_position)
 		results.extend(y_position)
-		results.extend([0]*(2 + self.BIN_SIZE + self.BIN_SIZE)) # has_home_city home_city_x home_city_y
+		results.extend([0]*(2 + self.BIN_SIZE + self.BIN_SIZE))  # has_home_city home_city_x home_city_y
 		results.extend(player)
-		results.extend([0]*(2 + 4)) # is_veteran kills
+		results.extend([0]*(2 + 4))  # is_veteran kills
 		results.extend(is_capital)
 		results.extend(has_walls)
 		results.extend(level)

@@ -6,7 +6,7 @@ from agent.interface import parsers
 
 class Parser:
 	"""
-	Parses game states in json dictionary format produced by the GameSaver class.
+	Parses game states in JSON format produced by the GameSaver class.
 	"""
 
 	def __init__(self, map_size=MAP_SIZE):
@@ -18,11 +18,12 @@ class Parser:
 
 	def parse(self, game_state):
 		"""
-		:param game_state: the game state in dictionary form
+		Parses the game state.
 
+		:param game_state: the game state in JSON format
 		:return: a dictionary with entries "agent" and "opponent".
-			Each entry is a dictionary containing entity_list, city_indices, map,
-			and scalar_features as seen from the respective player.
+			Each entry is a dictionary containing entity_list, entity_x, entity_y, city_indices,
+			non_null_mask, map, owning_city, owning_player, and scalar_features as seen from the respective player.
 		"""
 
 		# Assume that the player to move is the agent
@@ -35,7 +36,7 @@ class Parser:
 		}
 
 	def _parse_as_tribe(self, game_state, tribe_id):
-		entity_data = self.entity_parser.parse_entities(game_state["unit"], game_state["city"], tribe_id)
+		entity_data = self.entity_parser.parse_entities(game_state, tribe_id)
 		parsed_map, parsed_owners = self.map_parser.parse_map(game_state, tribe_id)
 		scalar_features = self.scalar_parser.parse(game_state, tribe_id, 0, 0)  # TODO
 

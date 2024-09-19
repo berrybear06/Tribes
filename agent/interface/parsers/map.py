@@ -16,10 +16,6 @@ class MapParser:
 	village_or_city (2 booleans)
 	can_build: one_hot no ruin, building, temple, monument, village, or city (2)
 	networked (2)
-
-	To be concatenated before the spatial encoding process:
-	scattered_entities (16)
-	scattered_owning_city (8)
 	"""
 
 	def __init__(

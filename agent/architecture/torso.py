@@ -11,8 +11,8 @@ from agent.architecture.spatial import EntityScatter, TerritoryScatter, SpatialR
 
 class Torso(nn.Module):
 	def __init__(
-			self, max_entities, entity_input_size, entity_hidden_size, entity_output_size, entity_scatter_size,
-			city_scatter_size, player_scatter_size, map_size, map_input_channels, spatial_channels,
+			self, max_entities, entity_input_size, entity_hidden_size, entity_embed_size, entity_embed_all_size,
+			entity_scatter_size, city_scatter_size, player_scatter_size, map_size, map_input_channels, spatial_channels,
 			downscale_factor, downscale_kernel, resnet_blocks, use_layer_norm=False):
 		super(Torso, self).__init__()
 
@@ -20,11 +20,13 @@ class Torso(nn.Module):
 
 		self.transformer = EntityTransformer(entity_hidden_size, 1, 16, 2)
 
-		self.entity_proj2 = Projection1d(max_entities, entity_hidden_size, entity_output_size)
+		self.entity_proj2 = Projection1d(max_entities, entity_hidden_size, entity_embed_size)
+
+		self.entity_embed_all = nn.Linear(entity_hidden_size, entity_embed_all_size)
 
 		# EntityScatter module
 		self.entity_scatter = EntityScatter(
-			input_size=entity_output_size,
+			input_size=entity_embed_size,
 			output_size=entity_scatter_size,
 			max_entities=max_entities,
 			map_size=map_size,
@@ -33,7 +35,7 @@ class Torso(nn.Module):
 		# TerritoryScatter module for processing owning_city and owning_player
 		self.territory_scatter = TerritoryScatter(
 			size=map_size,
-			entity_embedding_size=entity_output_size,
+			entity_embedding_size=entity_embed_size,
 			city_output_size=city_scatter_size,
 			player_output_size=player_scatter_size,
 			max_entities=max_entities,
@@ -60,6 +62,7 @@ class Torso(nn.Module):
 	def forward(self, parsed_state):
 		# Process agent's perspective
 		agent_data = parsed_state['agent']
+		non_null_mask = agent_data["non_null_mask"]
 
 		# Preprocess the entity list through 1D convolutions
 		entity_list = agent_data['entity_list']  # Tensor of shape [units, channels]
@@ -67,8 +70,16 @@ class Torso(nn.Module):
 		print("after permute:", x.size())
 		x = self.entity_proj1(x)
 		print("before transform:", x.size())
-		x = self.transformer(x, agent_data["non_null_mask"])
+		x = self.transformer(x, non_null_mask)
 		print("after transform:", x)
+
+		emb = x.permute(0, 2, 1)  # Batches, units, channels
+		emb = emb * non_null_mask.unsqueeze(-1)
+		emb = emb.sum(dim=1)
+		entity_count = non_null_mask.sum(dim=1).clamp(min=1)
+		emb = emb / entity_count.unsqueeze(-1)
+		embedded_entity = self.entity_embed_all(emb)
+
 		x = self.entity_proj2(x)
 		print("after conv2:", x)
 
@@ -78,10 +89,7 @@ class Torso(nn.Module):
 
 		# Process and scatter city embeddings and player ownership
 		city_map, player_map = self.territory_scatter(
-			x,
-			agent_data['city_indices'],
-			agent_data['owning_city'],
-			agent_data['owning_player'])
+			x, agent_data['city_indices'], agent_data['owning_city'], agent_data['owning_player'])
 
 		# Concatenate the entity map, city map, and player map
 		print(agent_data["map"].size(), entity_map.size(), city_map.size(), player_map.size())
@@ -96,4 +104,4 @@ class Torso(nn.Module):
 		downscaled_map = self.downscale2(intermediate_map)
 
 		# Return 1d game embedding, map skip connections for deconvolution, scalar context for action type gating
-		return downscaled_map
+		return downscaled_map, embedded_entity

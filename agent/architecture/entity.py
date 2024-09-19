@@ -23,6 +23,11 @@ class EntityTransformer(nn.Module):
 			for _ in range(num_layers)
 		])
 
+		if self.use_layer_norm:
+			self.layer_norms = nn.ModuleList([
+				nn.LayerNorm(input_size) for _ in range(num_layers)
+			])
+
 		self.post_resblocks = nn.ModuleList([
 			ElementWiseResidualBlock(input_size, resblock_layers, hidden_size, use_layer_norm)
 			for _ in range(resblocks_after)
@@ -36,13 +41,11 @@ class EntityTransformer(nn.Module):
 		for resblock in self.pre_resblocks:
 			x = resblock(x)
 
-
-
 		# Apply transformer layers
-		for attn_layer in self.attention_layers:
+		for count, attn_layer in enumerate(self.attention_layers):
 			residual = x
 			if self.use_layer_norm:
-				x = nn.LayerNorm(x.size()[-1]).to(x.device)(x)
+				x = self.layer_norms[count](x)
 			print("before attn:", x.size(), mask.size())
 			x, _ = attn_layer(x, x, x, key_padding_mask=mask)
 			x += residual  # Residual connection
@@ -52,4 +55,3 @@ class EntityTransformer(nn.Module):
 			x = resblock(x)
 		x = x.permute(0, 2, 1)  # Batches, channels, units
 		return x
-
